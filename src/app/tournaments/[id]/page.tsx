@@ -104,6 +104,16 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
             </p>
           </div>
           <div className="flex items-center gap-4">
+            {session?.user?.role === 'admin' && (tournament.status === 'checkin' || tournament.status === 'upcoming') && (
+              <form action={`/api/tournaments/${params.id}/start`} method="POST">
+                <button
+                  type="submit"
+                  className="bg-green-500 text-white px-6 py-2 rounded-lg hover:opacity-90 transition-all"
+                >
+                  Iniciar Torneo
+                </button>
+              </form>
+            )}
             {(tournament.status === 'ongoing' || tournament.status === 'finished') && (
               <Link 
                 href={`/tournaments/${params.id}/bracket`}
