@@ -17,7 +17,7 @@ async function main() {
       gamertag: 'Admin',
       role: 'admin',
       points: 0,
-      mainCharacter: ['Mario']
+      mainCharacter: 'Mario'
     }
   });
   console.log('✅ Admin creado:', admin.gamertag);
@@ -33,7 +33,7 @@ async function main() {
       gamertag: 'Paco',
       role: 'player',
       points: 1250,
-      mainCharacter: ['Fox', 'Falco']
+      mainCharacter: 'Fox,Falco'
     }
   });
   console.log('✅ Jugador 1 creado:', player1.gamertag);
@@ -47,7 +47,7 @@ async function main() {
       gamertag: 'Doku',
       role: 'player',
       points: 1180,
-      mainCharacter: ['Mario']
+      mainCharacter: 'Mario'
     }
   });
   console.log('✅ Jugador 2 creado:', player2.gamertag);
