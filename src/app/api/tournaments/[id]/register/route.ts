@@ -10,14 +10,7 @@ export async function POST(
 ) {
   try {
     const session = await requireAuth();
-    const tournamentId = parseInt(params.id);
-
-    if (isNaN(tournamentId)) {
-      return NextResponse.json(
-        { error: 'ID de torneo inválido' },
-        { status: 400 }
-      );
-    }
+    const tournamentId = params.id;
 
     // Verificar que el torneo existe y está en estado correcto
     const tournament = await prisma.tournament.findUnique({
@@ -43,7 +36,7 @@ export async function POST(
       );
     }
 
-    if (tournament._count.participants >= tournament.maxParticipants) {
+    if (tournament._count.participants >= tournament.maxPlayers) {
       return NextResponse.json(
         { error: 'El torneo está lleno' },
         { status: 400 }
@@ -71,7 +64,7 @@ export async function POST(
       orderBy: { seed: 'desc' }
     });
 
-    const nextSeed = lastParticipant ? lastParticipant.seed + 1 : 1;
+    const nextSeed = lastParticipant && lastParticipant.seed ? lastParticipant.seed + 1 : 1;
 
     // Crear la inscripción
     const participant = await prisma.tournamentParticipant.create({
@@ -85,7 +78,6 @@ export async function POST(
         user: {
           select: {
             id: true,
-            name: true,
             gamertag: true,
             mainCharacter: true
           }
@@ -113,14 +105,7 @@ export async function DELETE(
 ) {
   try {
     const session = await requireAuth();
-    const tournamentId = parseInt(params.id);
-
-    if (isNaN(tournamentId)) {
-      return NextResponse.json(
-        { error: 'ID de torneo inválido' },
-        { status: 400 }
-      );
-    }
+    const tournamentId = params.id;
 
     // Verificar que el torneo existe
     const tournament = await prisma.tournament.findUnique({

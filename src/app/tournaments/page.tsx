@@ -2,6 +2,8 @@ import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import { getServerSession } from '@/lib/session'
 
+export const dynamic = 'force-dynamic'
+
 async function getTournaments() {
   try {
     const tournaments = await prisma.tournament.findMany({
@@ -38,7 +40,7 @@ async function getTournaments() {
 }
 
 export default async function TournamentsPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
   const tournaments = await getTournaments()
 
   const getStatusBadge = (status: string) => {

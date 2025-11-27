@@ -8,14 +8,7 @@ export async function POST(
 ) {
   try {
     const session = await requireAuth();
-    const tournamentId = parseInt(params.id);
-
-    if (isNaN(tournamentId)) {
-      return NextResponse.json(
-        { error: 'ID de torneo inválido' },
-        { status: 400 }
-      );
-    }
+    const tournamentId = params.id;
 
     // Verificar que el torneo existe y está en check-in
     const tournament = await prisma.tournament.findUnique({
@@ -66,7 +59,6 @@ export async function POST(
         user: {
           select: {
             id: true,
-            name: true,
             gamertag: true,
             mainCharacter: true
           }

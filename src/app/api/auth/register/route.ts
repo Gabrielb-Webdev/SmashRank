@@ -39,10 +39,10 @@ export async function POST(request: Request) {
     // Create user
     const user = await prisma.user.create({
       data: {
-        name,
+        gamertag: name,
         email,
         password: hashedPassword,
-        role: 'PLAYER',
+        role: 'player',
         points: 1000,
       }
     })
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
         message: 'Usuario creado exitosamente',
         user: {
           id: user.id,
-          name: user.name,
+          gamertag: user.gamertag,
           email: user.email,
           role: user.role,
         }

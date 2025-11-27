@@ -8,14 +8,7 @@ export async function POST(
 ) {
   try {
     await requireAdmin();
-    const tournamentId = parseInt(params.id);
-
-    if (isNaN(tournamentId)) {
-      return NextResponse.json(
-        { error: 'ID de torneo inválido' },
-        { status: 400 }
-      );
-    }
+    const tournamentId = params.id;
 
     const tournament = await prisma.tournament.findUnique({
       where: { id: tournamentId },
@@ -70,12 +63,10 @@ export async function POST(
     await prisma.match.createMany({
       data: matches.map(match => ({
         tournamentId,
-        round: match.round,
-        matchNumber: match.matchNumber,
+        round: `R${match.round}`,
+        bestOf: 3,
         player1Id: match.player1Id,
-        player2Id: match.player2Id,
-        player1Score: 0,
-        player2Score: 0
+        player2Id: match.player2Id || ''
       }))
     });
 
@@ -100,14 +91,14 @@ export async function POST(
 }
 
 function generateBracket(
-  participants: Array<{ id: number; seed: number; user: { gamertag: string } }>,
+  participants: Array<{ id: string; seed: number | null; user: { gamertag: string } }>,
   format: string
 ) {
   const matches: Array<{
     round: number;
     matchNumber: number;
-    player1Id: number;
-    player2Id: number | null;
+    player1Id: string;
+    player2Id: string | null;
   }> = [];
 
   // Single Elimination Bracket
@@ -145,8 +136,8 @@ function generateBracket(
         matches.push({
           round,
           matchNumber: matchNumber++,
-          player1Id: 0, // TBD
-          player2Id: 0  // TBD
+          player1Id: '', // TBD
+          player2Id: ''  // TBD
         });
       }
     }

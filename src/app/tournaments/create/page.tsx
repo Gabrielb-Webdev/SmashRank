@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 
 export default function CreateTournamentPage() {
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session } = useSession({ required: false })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 

@@ -1,9 +1,9 @@
-import { getServerSession as getSession } from 'next-auth'
+import { getServerSession as nextAuthGetServerSession } from 'next-auth/next'
 import { authOptions } from './auth'
 
 export async function getServerSession() {
   try {
-    return await getSession(authOptions)
+    return await nextAuthGetServerSession(authOptions)
   } catch (error) {
     return null
   }

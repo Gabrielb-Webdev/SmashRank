@@ -8,16 +8,9 @@ export async function POST(
 ) {
   try {
     const session = await requireAuth();
-    const matchId = parseInt(params.matchId);
+    const matchId = params.matchId;
     const body = await request.json();
     const { player1Score, player2Score, winnerId } = body;
-
-    if (isNaN(matchId)) {
-      return NextResponse.json(
-        { error: 'ID de match inválido' },
-        { status: 400 }
-      );
-    }
 
     // Validar scores
     if (typeof player1Score !== 'number' || typeof player2Score !== 'number') {
@@ -35,7 +28,11 @@ export async function POST(
           select: {
             id: true,
             status: true,
-            creatorId: true
+            creator: {
+              select: {
+                id: true
+              }
+            }
           }
         },
         player1: {

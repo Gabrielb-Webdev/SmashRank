@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/prisma'
 import Image from 'next/image'
 
+export const dynamic = 'force-dynamic'
+
 async function getPlayers() {
   try {
     const players = await prisma.user.findMany({
