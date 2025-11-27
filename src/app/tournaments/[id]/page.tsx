@@ -103,7 +103,17 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
               Organizado por <span className="text-purple-400">{tournament.creator.gamertag}</span>
             </p>
           </div>
-          {getStatusBadge(tournament.status)}
+          <div className="flex items-center gap-4">
+            {(tournament.status === 'ongoing' || tournament.status === 'finished') && (
+              <Link 
+                href={`/tournaments/${params.id}/bracket`}
+                className="bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white px-6 py-2 rounded-lg hover:opacity-90 transition-all"
+              >
+                Ver Bracket
+              </Link>
+            )}
+            {getStatusBadge(tournament.status)}
+          </div>
         </div>
       </div>
 
