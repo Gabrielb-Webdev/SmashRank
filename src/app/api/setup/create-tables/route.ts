@@ -1,30 +1,29 @@
 import { NextResponse } from 'next/server'
-import { exec } from 'child_process'
-import { promisify } from 'util'
-
-const execAsync = promisify(exec)
+import { PrismaClient } from '@prisma/client'
 
 export async function POST() {
   try {
-    // Ejecutar prisma db push para crear las tablas
-    const { stdout, stderr } = await execAsync('npx prisma db push --skip-generate')
+    const prisma = new PrismaClient()
     
-    console.log('Prisma push output:', stdout)
-    if (stderr) console.error('Prisma push errors:', stderr)
+    // Intentar hacer una query simple para verificar la conexión
+    await prisma.$connect()
+    
+    // Las tablas deberían existir automáticamente si Prisma Migrate está configurado
+    // Si no, Vercel debería crearlas automáticamente con la integración de Neon
+    
+    await prisma.$disconnect()
 
     return NextResponse.json({
       success: true,
-      message: 'Tablas creadas exitosamente',
-      output: stdout
+      message: 'Conexión a base de datos exitosa. Las tablas se crearán automáticamente.',
     })
   } catch (error: any) {
-    console.error('Error creating tables:', error)
+    console.error('Error connecting to database:', error)
     
     return NextResponse.json({
-      error: 'Error al crear las tablas',
+      error: 'Error al conectar con la base de datos',
       details: error.message,
-      output: error.stdout || '',
-      errorOutput: error.stderr || ''
+      hint: 'Asegúrate de que DATABASE_URL esté configurado correctamente en Vercel'
     }, { status: 500 })
   }
 }

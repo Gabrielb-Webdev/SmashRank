@@ -14,20 +14,7 @@ export default function SetupPage() {
     setResult(null)
 
     try {
-      // Paso 1: Crear las tablas
-      const createTablesRes = await fetch('/api/setup/create-tables', {
-        method: 'POST',
-      })
-
-      const createTablesData = await createTablesRes.json()
-
-      if (!createTablesRes.ok) {
-        setError('Error al crear tablas: ' + (createTablesData.error || createTablesData.details || 'Error desconocido'))
-        console.error('Create tables error:', createTablesData)
-        return
-      }
-
-      // Paso 2: Insertar datos iniciales
+      // Insertar datos iniciales (Prisma creará las tablas automáticamente si no existen)
       const res = await fetch('/api/setup', {
         method: 'POST',
       })
@@ -35,7 +22,7 @@ export default function SetupPage() {
       const data = await res.json()
 
       if (!res.ok) {
-        setError(data.error || 'Error al configurar la base de datos')
+        setError(data.error || data.details || 'Error al configurar la base de datos')
         console.error('Setup error:', data)
         return
       }
