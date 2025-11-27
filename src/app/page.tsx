@@ -1,4 +1,22 @@
-export default function Home() {
+import { prisma } from '@/lib/prisma'
+import Link from 'next/link'
+
+async function getStats() {
+  try {
+    const [tournamentsCount, playersCount, matchesCount] = await Promise.all([
+      prisma.tournament.count(),
+      prisma.user.count({ where: { role: 'player' } }),
+      prisma.match.count({ where: { status: 'finished' } })
+    ])
+    return { tournamentsCount, playersCount, matchesCount }
+  } catch (error) {
+    return { tournamentsCount: 0, playersCount: 0, matchesCount: 0 }
+  }
+}
+
+export default async function Home() {
+  const stats = await getStats()
+
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
@@ -22,26 +40,26 @@ export default function Home() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="btn-primary">
+            <Link href="/tournaments" className="btn-primary">
               Ver Torneos
-            </button>
-            <button className="btn-secondary">
+            </Link>
+            <Link href="/ranking" className="btn-secondary">
               Ver Ranking
-            </button>
+            </Link>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 max-w-4xl mx-auto">
             <div className="card">
-              <div className="text-4xl font-bold gradient-text mb-2">0</div>
+              <div className="text-4xl font-bold gradient-text mb-2">{stats.tournamentsCount}</div>
               <div className="text-gray-400">Torneos Activos</div>
             </div>
             <div className="card">
-              <div className="text-4xl font-bold gradient-text mb-2">0</div>
+              <div className="text-4xl font-bold gradient-text mb-2">{stats.playersCount}</div>
               <div className="text-gray-400">Jugadores Registrados</div>
             </div>
             <div className="card">
-              <div className="text-4xl font-bold gradient-text mb-2">0</div>
+              <div className="text-4xl font-bold gradient-text mb-2">{stats.matchesCount}</div>
               <div className="text-gray-400">Matches Jugados</div>
             </div>
           </div>
