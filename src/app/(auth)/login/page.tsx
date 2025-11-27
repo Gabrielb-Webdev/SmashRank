@@ -83,7 +83,7 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="input"
+                className="input w-full"
                 placeholder="tu@email.com"
                 required
                 disabled={loading}
@@ -100,7 +100,7 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="input"
+                className="input w-full"
                 placeholder="••••••••"
                 required
                 disabled={loading}

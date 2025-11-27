@@ -96,7 +96,7 @@ export default function RegisterPage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="input"
+                className="input w-full"
                 placeholder="MiNickname"
                 required
                 disabled={loading}
@@ -114,7 +114,7 @@ export default function RegisterPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="input"
+                className="input w-full"
                 placeholder="tu@email.com"
                 required
                 disabled={loading}
@@ -131,7 +131,7 @@ export default function RegisterPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="input"
+                className="input w-full"
                 placeholder="••••••••"
                 required
                 disabled={loading}
@@ -149,7 +149,7 @@ export default function RegisterPage() {
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="input"
+                className="input w-full"
                 placeholder="••••••••"
                 required
                 disabled={loading}
