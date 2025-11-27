@@ -4,8 +4,21 @@ import bcrypt from 'bcrypt'
 
 export async function POST() {
   try {
-    // Verificar si ya hay datos
-    const existingUsers = await prisma.user.count()
+    // Verificar si ya hay datos (o si las tablas no existen aún)
+    let existingUsers = 0
+    try {
+      existingUsers = await prisma.user.count()
+    } catch (tableError: any) {
+      // Si las tablas no existen, retornar error específico
+      if (tableError.code === 'P2021' || tableError.message.includes('does not exist')) {
+        return NextResponse.json({
+          error: 'Las tablas de la base de datos no existen. Ejecuta "npx prisma db push" en tu terminal local primero.',
+          details: 'Abre tu terminal en la carpeta del proyecto y ejecuta: npx prisma db push',
+          code: 'TABLES_NOT_FOUND'
+        }, { status: 500 })
+      }
+      throw tableError
+    }
     
     if (existingUsers > 0) {
       return NextResponse.json(
