@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/session';
 
+// Note: Socket.IO events will be emitted via middleware or separate service
+
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
