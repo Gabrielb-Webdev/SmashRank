@@ -1,0 +1,5 @@
+# Configuración Node.js para Hostinger
+cloudlinux_selector:enabled:true
+app_mode:production
+app_startup_file:server.js
+app_domain_enabled:true
