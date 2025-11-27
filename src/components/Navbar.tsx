@@ -13,18 +13,23 @@ export default function Navbar() {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-12 h-12 transition-transform duration-[0.4s] group-hover:scale-110 group-hover:rotate-5">
+            <div className="w-12 h-12 transition-transform duration-[0.4s] group-hover:scale-110 group-hover:rotate-12">
               <Image 
                 src="/logo.svg" 
-                alt="Brodev Lab" 
+                alt="SmashRank" 
                 width={48} 
                 height={48}
                 priority
               />
             </div>
-            <span className="text-2xl font-bold font-poppins">
-              <span className="gradient-text">SmashRank</span>
-            </span>
+            <div className="flex flex-col">
+              <span className="text-3xl font-extrabold font-poppins leading-none">
+                <span className="gradient-text">SmashRank</span>
+              </span>
+              <span className="text-[9px] text-gray-500 tracking-wider uppercase font-medium mt-0.5">
+                By Brodev Lab
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

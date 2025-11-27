@@ -44,25 +44,27 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-6 relative">
+            <div className="absolute inset-0 blur-3xl opacity-30 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
             <Image 
               src="/logo.svg" 
-              alt="Brodev Lab" 
-              width={80} 
-              height={80}
+              alt="SmashRank" 
+              width={100} 
+              height={100}
               priority
+              className="relative z-10"
             />
           </div>
-          <h1 className="text-3xl font-bold font-poppins gradient-text mb-2">
+          <h1 className="text-4xl font-extrabold font-poppins gradient-text mb-3">
             Iniciar Sesión
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-400 text-sm">
             Accede a tu cuenta de SmashRank
           </p>
         </div>
 
         {/* Form Card */}
-        <div className="card p-8">
+        <div className="card p-8 shadow-2xl shadow-purple-500/20">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Message */}
             {error && (
