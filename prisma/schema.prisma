@@ -1,0 +1,168 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String    // Hashed con bcrypt
+  gamertag      String    @unique
+  role          String    @default("player") // "admin" | "player"
+  
+  // Perfil
+  mainCharacter String[]  // ["Mario", "Fox"]
+  region        String? 
+  points        Int       @default(0)
+  startggId     String?   @unique
+  avatar        String?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relaciones
+  tournaments   TournamentParticipant[]
+  matchesAsP1   Match[]   @relation("Player1")
+  matchesAsP2   Match[]   @relation("Player2")
+  pointHistory  PointHistory[]
+  createdTournaments Tournament[]
+}
+
+model Tournament {
+  id            String    @id @default(cuid())
+  name          String
+  startDate     DateTime
+  checkInTime   DateTime  // 15 min antes del inicio
+  
+  // Configuración
+  format        String    // "single" | "double" | "roundrobin"
+  maxPlayers    Int
+  status        String    @default("upcoming") // "upcoming" | "checkin" | "ongoing" | "finished"
+  
+  // Stages
+  starterStages Json      // ["Battlefield", "FD", "PS2"]
+  cpStages      Json      // ["Town & City", "Smashville"]
+  bannedStages  Json      // ["Temple"]
+  
+  // Best-of por ronda (JSON)
+  roundConfig   Json      // { "WR1": 1, "WSF": 3, "WF": 5, "GF": 5 }
+  
+  // Puntos
+  pointsConfig  Json      // { "1": 100, "2": 75, "3": 50, "4": 35 }
+  
+  startggUrl    String?
+  createdById   String
+  createdAt     DateTime  @default(now())
+  
+  participants  TournamentParticipant[]
+  matches       Match[]
+  creator       User      @relation(fields: [createdById], references: [id])
+}
+
+model TournamentParticipant {
+  id            String    @id @default(cuid())
+  userId        String
+  tournamentId  String
+  
+  checkedIn     Boolean   @default(false)
+  seed          Int?
+  placement     Int?
+  pointsEarned  Int       @default(0)
+  
+  user          User      @relation(fields: [userId], references: [id])
+  tournament    Tournament @relation(fields: [tournamentId], references: [id])
+  
+  @@unique([userId, tournamentId])
+}
+
+model Match {
+  id            String    @id @default(cuid())
+  tournamentId  String
+  round         String    // "WR1", "WSF", "WF", "LR1", "GF"
+  bestOf        Int       // 1, 3, 5
+  
+  player1Id     String
+  player2Id     String
+  
+  // Check-in
+  p1CheckedIn   Boolean   @default(false)
+  p2CheckedIn   Boolean   @default(false)
+  
+  // Estado del match
+  status        String    @default("pending") // "pending" | "checkin" | "stage_pick" | "char_select" | "in_progress" | "finished"
+  
+  // Current game info
+  currentGame   Int       @default(1)
+  currentPhase  String?   // "ban" | "pick" | "char_select" | "playing"
+  currentTurn   String?   // userId de quien tiene el turno
+  
+  // Ganador
+  winnerId      String?
+  
+  // Scores
+  player1Score  Int       @default(0)
+  player2Score  Int       @default(0)
+  
+  // Reporte de resultados
+  reportedBy    String?   // userId que reportó primero
+  reportedScore Json?     // { "p1": 2, "p2": 1 }
+  confirmedBy   String?   // userId que confirmó
+  
+  // Games individuales
+  games         Game[]
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  player1       User      @relation("Player1", fields: [player1Id], references: [id])
+  player2       User      @relation("Player2", fields: [player2Id], references: [id])
+  tournament    Tournament @relation(fields: [tournamentId], references: [id])
+}
+
+model Game {
+  id            String    @id @default(cuid())
+  matchId       String
+  gameNumber    Int       // 1, 2, 3, etc.
+  
+  // Stage selection
+  bannedStages  Json      // ["FD", "Battlefield"]
+  selectedStage String? 
+  pickedBy      String?   // userId
+  
+  // Character selection
+  p1Character   String?
+  p2Character   String?
+  
+  winnerId      String?
+  
+  createdAt     DateTime  @default(now())
+  
+  match         Match     @relation(fields: [matchId], references: [id], onDelete: Cascade)
+}
+
+model PointHistory {
+  id            String    @id @default(cuid())
+  userId        String
+  tournamentId  String? 
+  
+  pointsChange  Int       // +100, -20, etc.
+  reason        String    // "Tournament: 1st place", "Matchmaking win"
+  
+  createdAt     DateTime  @default(now())
+  
+  user          User      @relation(fields: [userId], references: [id])
+}
+
+model Stage {
+  id            String    @id @default(cuid())
+  name          String    @unique
+  imageUrl      String?
+  type          String    // "starter" | "counterpick"
+  isLegal       Boolean   @default(true)
+}

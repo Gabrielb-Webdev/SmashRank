@@ -1,0 +1,158 @@
+'use client'
+
+import Link from 'next/link'
+import Image from 'next/image'
+import { useState } from 'react'
+
+export default function Navbar() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  return (
+    <nav className="fixed top-0 w-full bg-[#0A0118]/80 backdrop-blur-xl border-b border-purple-500/10 z-50">
+      <div className="container mx-auto px-6 py-4">
+        <div className="flex justify-between items-center">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-12 h-12 transition-transform duration-[0.4s] group-hover:scale-110 group-hover:rotate-5">
+              <Image 
+                src="/logo.svg" 
+                alt="Brodev Lab" 
+                width={48} 
+                height={48}
+                priority
+              />
+            </div>
+            <span className="text-2xl font-bold font-poppins">
+              <span className="gradient-text">SmashRank</span>
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <ul className="hidden md:flex gap-8 items-center">
+            <li>
+              <Link 
+                href="/" 
+                className="text-gray-300 hover:text-white transition-colors duration-300 font-medium"
+              >
+                Inicio
+              </Link>
+            </li>
+            <li>
+              <Link 
+                href="/tournaments" 
+                className="text-gray-300 hover:text-white transition-colors duration-300 font-medium"
+              >
+                Torneos
+              </Link>
+            </li>
+            <li>
+              <Link 
+                href="/ranking" 
+                className="text-gray-300 hover:text-white transition-colors duration-300 font-medium"
+              >
+                Ranking
+              </Link>
+            </li>
+            <li>
+              <Link 
+                href="/matchmaking" 
+                className="text-gray-300 hover:text-white transition-colors duration-300 font-medium"
+              >
+                Matchmaking
+              </Link>
+            </li>
+          </ul>
+
+          {/* Auth Buttons */}
+          <div className="hidden md:flex gap-4 items-center">
+            <Link 
+              href="/login" 
+              className="text-gray-300 hover:text-white transition-colors duration-300 font-medium"
+            >
+              Iniciar Sesión
+            </Link>
+            <Link 
+              href="/register" 
+              className="btn-primary"
+            >
+              Registrarse
+            </Link>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden flex flex-col gap-1.5 w-8 h-8 justify-center items-center"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
+            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden pt-6 pb-4">
+            <ul className="flex flex-col gap-4">
+              <li>
+                <Link 
+                  href="/" 
+                  className="block text-gray-300 hover:text-white transition-colors duration-300 font-medium py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Inicio
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/tournaments" 
+                  className="block text-gray-300 hover:text-white transition-colors duration-300 font-medium py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Torneos
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/ranking" 
+                  className="block text-gray-300 hover:text-white transition-colors duration-300 font-medium py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Ranking
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/matchmaking" 
+                  className="block text-gray-300 hover:text-white transition-colors duration-300 font-medium py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Matchmaking
+                </Link>
+              </li>
+              <li className="pt-4 border-t border-purple-500/20">
+                <Link 
+                  href="/login" 
+                  className="block text-gray-300 hover:text-white transition-colors duration-300 font-medium py-2"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Iniciar Sesión
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  href="/register" 
+                  className="block btn-primary text-center"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Registrarse
+                </Link>
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+    </nav>
+  )
+}
