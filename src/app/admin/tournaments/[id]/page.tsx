@@ -2,6 +2,9 @@ import { getServerSession } from '@/lib/session'
 import { redirect, notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import BracketView from '@/components/BracketView'
+import ReportResultModal from '@/components/ReportResultModal'
+import GenerateBracketButton from './GenerateBracketButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -14,8 +17,27 @@ export default async function AdminTournamentDetailPage({ params }: { params: { 
 
   const tournament = await prisma.tournament.findUnique({
     where: { id: params.id },
-    include: {
-      creator: true,
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      game: true,
+      region: true,
+      status: true,
+      format: true,
+      maxPlayers: true,
+      startDate: true,
+      endDate: true,
+      checkInTime: true,
+      creatorId: true,
+      roundConfig: true,
+      pointsConfig: true,
+      creator: {
+        select: {
+          id: true,
+          gamertag: true
+        }
+      },
       participants: {
         include: {
           user: {
@@ -35,9 +57,32 @@ export default async function AdminTournamentDetailPage({ params }: { params: { 
         }
       },
       matches: {
-        include: {
-          player1: true,
-          player2: true
+        select: {
+          id: true,
+          round: true,
+          bestOf: true,
+          player1Id: true,
+          player2Id: true,
+          winnerId: true,
+          player1Score: true,
+          player2Score: true,
+          status: true,
+          createdAt: true,
+          player1: {
+            select: {
+              id: true,
+              gamertag: true
+            }
+          },
+          player2: {
+            select: {
+              id: true,
+              gamertag: true
+            }
+          }
+        },
+        orderBy: {
+          createdAt: 'asc'
         }
       }
     }
@@ -156,33 +201,25 @@ export default async function AdminTournamentDetailPage({ params }: { params: { 
               )}
             </div>
 
-            {/* Matches */}
+            {/* Bracket */}
             {tournament.matches.length > 0 && (
               <div className="card p-6">
-                <h2 className="text-2xl font-bold mb-4">Matches ({tournament.matches.length})</h2>
-                <div className="space-y-3">
-                  {tournament.matches.map((match) => (
-                    <div key={match.id} className="p-4 bg-purple-500/5 border border-purple-500/20 rounded-lg">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <span className="text-sm text-gray-400">{match.round}</span>
-                          <div className="flex items-center gap-2">
-                            <span className="font-semibold">{match.player1.gamertag}</span>
-                            <span className="text-gray-400">vs</span>
-                            <span className="font-semibold">{match.player2.gamertag}</span>
-                          </div>
-                        </div>
-                        <span className={`text-xs px-3 py-1 rounded-full ${
-                          match.status === 'finished' ? 'bg-green-500/20 text-green-400' :
-                          match.status === 'in_progress' ? 'bg-yellow-500/20 text-yellow-400' :
-                          'bg-gray-500/20 text-gray-400'
-                        }`}>
-                          {match.status}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <BracketView 
+                  matches={tournament.matches.map(m => ({
+                    id: m.id,
+                    round: m.round,
+                    player1Id: m.player1Id,
+                    player2Id: m.player2Id,
+                    player1: m.player1 ? { id: m.player1.id, gamertag: m.player1.gamertag } : undefined,
+                    player2: m.player2 ? { id: m.player2.id, gamertag: m.player2.gamertag } : undefined,
+                    winnerId: m.winnerId,
+                    player1Score: m.player1Score,
+                    player2Score: m.player2Score,
+                    status: m.status,
+                    position: 0
+                  }))}
+                  format={tournament.format as 'single' | 'double'}
+                />
               </div>
             )}
           </div>
@@ -222,15 +259,8 @@ export default async function AdminTournamentDetailPage({ params }: { params: { 
             <div className="card p-6">
               <h3 className="text-xl font-bold mb-4">Acciones</h3>
               <div className="space-y-2">
-                {tournament.status === 'upcoming' && (
-                  <button className="btn-primary w-full">
-                    Iniciar Check-in
-                  </button>
-                )}
-                {tournament.status === 'active' && (
-                  <button className="btn-primary w-full">
-                    Generar Bracket
-                  </button>
+                {tournament.status === 'upcoming' && tournament.matches.length === 0 && (
+                  <GenerateBracketButton tournamentId={tournament.id} />
                 )}
                 <button className="w-full px-4 py-2 bg-red-500/20 text-red-400 rounded-lg border border-red-500/30 hover:bg-red-500/30 transition-colors">
                   Eliminar Torneo
