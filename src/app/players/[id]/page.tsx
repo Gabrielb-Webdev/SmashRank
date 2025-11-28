@@ -44,8 +44,8 @@ export default async function PlayerProfilePage({ params }: { params: { id: stri
   }
 
   // Calcular estadísticas
-  const totalTournaments = user.participations.length
-  const finishedTournaments = user.participations.filter(p => p.tournament.status === 'finished')
+  const totalTournaments = user.tournaments.length
+  const finishedTournaments = user.tournaments.filter(p => p.tournament.status === 'finished')
   const wins = finishedTournaments.filter(p => p.placement === 1).length
   const podiums = finishedTournaments.filter(p => p.placement && p.placement <= 3).length
   const avgPlacement = finishedTournaments.length > 0
@@ -120,13 +120,13 @@ export default async function PlayerProfilePage({ params }: { params: { id: stri
           Historial de Torneos
         </h2>
 
-        {user.participations.length === 0 ? (
+        {user.tournaments.length === 0 ? (
           <p className="text-gray-400 text-center py-8">
             Aún no ha participado en ningún torneo
           </p>
         ) : (
           <div className="space-y-3">
-            {user.participations.map((participation) => (
+            {user.tournaments.map((participation) => (
               <Link
                 key={participation.id}
                 href={`/tournaments/${participation.tournament.id}`}
