@@ -2,6 +2,9 @@ import { prisma } from '@/lib/prisma'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getServerSession } from '@/lib/session'
+import RegisterButton from './RegisterButton'
+
+export const dynamic = 'force-dynamic'
 
 async function getTournament(id: string) {
   try {
@@ -203,51 +206,47 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Registration */}
-          {session?.user && tournament.status === 'upcoming' && (
-            <div className="card">
-              <h2 className="text-xl font-bold font-poppins mb-4 gradient-text">
-                Registro
-              </h2>
-              
-              {isUserRegistered ? (
-                <div>
-                  <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 text-green-400 mb-4">
-                    ✓ Estás registrado en este torneo
-                  </div>
-                  <button className="w-full px-4 py-2 bg-red-500/20 text-red-400 rounded-lg border border-red-500/30 hover:bg-red-500/30 transition-colors">
-                    Cancelar Inscripción
-                  </button>
+          <div className="card">
+            <h2 className="text-xl font-bold font-poppins mb-4 gradient-text">
+              Registro
+            </h2>
+            
+            {session?.user ? (
+              isUserRegistered ? (
+                <div className="text-center">
+                  <div className="text-4xl mb-3">✅</div>
+                  <p className="text-green-400 font-semibold mb-2">¡Estás registrado!</p>
+                  <p className="text-sm text-gray-400">Te esperamos en el torneo</p>
                 </div>
               ) : canRegister ? (
                 <div>
                   <p className="text-gray-400 text-sm mb-4">
                     Regístrate para participar en este torneo
                   </p>
-                  <button className="btn-primary w-full">
-                    Inscribirme
-                  </button>
+                  <RegisterButton tournamentId={params.id} />
+                </div>
+              ) : tournament.status === 'finished' ? (
+                <div className="text-center text-gray-400">
+                  <p className="mb-2">Torneo finalizado</p>
+                </div>
+              ) : tournament.participants.length >= tournament.maxPlayers ? (
+                <div className="text-center text-gray-400">
+                  <p className="mb-2">Torneo completo</p>
                 </div>
               ) : (
-                <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 text-yellow-400">
-                  ⚠ Torneo lleno o cerrado
+                <div className="text-center text-gray-400">
+                  <p className="mb-2">Registro no disponible</p>
                 </div>
-              )}
-            </div>
-          )}
-
-          {!session?.user && tournament.status === 'upcoming' && (
-            <div className="card">
-              <h2 className="text-xl font-bold font-poppins mb-4 gradient-text">
-                Registro
-              </h2>
-              <p className="text-gray-400 text-sm mb-4">
-                Inicia sesión para inscribirte
-              </p>
-              <Link href="/login" className="btn-primary w-full block text-center">
-                Iniciar Sesión
-              </Link>
-            </div>
-          )}
+              )
+            ) : (
+              <div className="text-center">
+                <p className="text-gray-400 mb-4 text-sm">Inicia sesión para registrarte</p>
+                <Link href="/login" className="btn-primary w-full block">
+                  Iniciar Sesión
+                </Link>
+              </div>
+            )}
+          </div>
 
           {/* Stages */}
           <div className="card">

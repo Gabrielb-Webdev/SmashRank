@@ -32,7 +32,7 @@
   }
   
   .card {
-    @apply bg-bg-card border border-primary/20 rounded-2xl p-6 transition-all duration-[0.4s] hover:-translate-y-2 hover:shadow-glow-xl hover:border-primary;
+    @apply bg-bg-card border border-primary/20 rounded-2xl p-6 transition-all duration-300;
   }
   
   .input {
