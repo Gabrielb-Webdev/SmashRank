@@ -92,8 +92,7 @@ export async function POST(
             p2CheckedIn: false,
             currentStage: null,
             p1Character: null,
-            p2Character: null,
-            games: []
+            p2Character: null
           }
         })
       })
