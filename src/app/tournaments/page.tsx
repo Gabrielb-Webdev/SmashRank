@@ -7,9 +7,8 @@ export const dynamic = 'force-dynamic'
 async function getTournaments() {
   try {
     const tournaments = await prisma.tournament.findMany({
-      where: {
-        region: 'Argentina' // Solo torneos de Argentina
-      },
+      where: {},
+      // Mostrar torneos de todas las provincias de Argentina
       include: {
         creator: {
           select: {

@@ -10,9 +10,8 @@ export default async function AdminUsersPage() {
   }
 
   const users = await prisma.user.findMany({
-    where: {
-      region: 'Argentina' // Solo usuarios de Argentina
-    },
+    where: {},
+    // Mostrar usuarios de todas las provincias de Argentina
     orderBy: {
       points: 'desc' // Ordenar por puntos
     },

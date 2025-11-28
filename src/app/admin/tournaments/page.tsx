@@ -11,9 +11,8 @@ export default async function AdminTournamentsPage() {
   }
 
   const tournaments = await prisma.tournament.findMany({
-    where: {
-      region: 'Argentina' // Solo torneos de Argentina
-    },
+    where: {},
+    // Mostrar torneos de todas las provincias de Argentina
     orderBy: {
       createdAt: 'desc'
     },

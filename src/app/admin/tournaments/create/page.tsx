@@ -31,7 +31,7 @@ export default function CreateTournamentPage() {
       startDate: startTime ? `${startDate}T${startTime}:00` : startDate,
       endDate: endTime ? `${endDate}T${endTime}:00` : endDate,
       checkInTime: checkInTime ? `${startDate}T${checkInTime}:00` : startDate,
-      region: 'Argentina',
+      region: formData.get('region'),
       entryFee: parseFloat(formData.get('entryFee') as string) || 0,
       prizePool: formData.get('prizePool'),
       rules: formData.get('rules')
@@ -251,19 +251,44 @@ export default function CreateTournamentPage() {
               />
             </div>
 
-            {/* Region (readonly) */}
+            {/* Provincia */}
             <div>
               <label className="block text-sm font-medium mb-2">
-                Región
+                Provincia *
               </label>
-              <input
-                type="text"
-                value="🇦🇷 Argentina"
-                disabled
-                className="w-full px-4 py-3 bg-black/50 border border-gray-500/30 rounded-lg text-gray-400 cursor-not-allowed"
-              />
+              <select
+                name="region"
+                required
+                defaultValue="Buenos Aires"
+                className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
+              >
+                <option value="Buenos Aires">Buenos Aires</option>
+                <option value="Ciudad Autónoma de Buenos Aires">Ciudad Autónoma de Buenos Aires (CABA)</option>
+                <option value="Catamarca">Catamarca</option>
+                <option value="Chaco">Chaco</option>
+                <option value="Chubut">Chubut</option>
+                <option value="Córdoba">Córdoba</option>
+                <option value="Corrientes">Corrientes</option>
+                <option value="Entre Ríos">Entre Ríos</option>
+                <option value="Formosa">Formosa</option>
+                <option value="Jujuy">Jujuy</option>
+                <option value="La Pampa">La Pampa</option>
+                <option value="La Rioja">La Rioja</option>
+                <option value="Mendoza">Mendoza</option>
+                <option value="Misiones">Misiones</option>
+                <option value="Neuquén">Neuquén</option>
+                <option value="Río Negro">Río Negro</option>
+                <option value="Salta">Salta</option>
+                <option value="San Juan">San Juan</option>
+                <option value="San Luis">San Luis</option>
+                <option value="Santa Cruz">Santa Cruz</option>
+                <option value="Santa Fe">Santa Fe</option>
+                <option value="Santiago del Estero">Santiago del Estero</option>
+                <option value="Tierra del Fuego">Tierra del Fuego</option>
+                <option value="Tucumán">Tucumán</option>
+              </select>
               <p className="text-xs text-gray-500 mt-1">
-                SmashRank actualmente solo opera en Argentina
+                Selecciona la provincia donde se realizará el torneo
               </p>
             </div>
           </div>

@@ -91,10 +91,31 @@ export default async function RankingPage() {
       {/* Filters */}
       <div className="mb-6 flex gap-4 flex-wrap items-center">
         <select className="input w-auto">
-          <option>Todas las regiones</option>
-          <option>México</option>
-          <option>América Latina</option>
-          <option>USA</option>
+          <option>Todas las provincias</option>
+          <option>Buenos Aires</option>
+          <option>Ciudad Autónoma de Buenos Aires</option>
+          <option>Córdoba</option>
+          <option>Santa Fe</option>
+          <option>Mendoza</option>
+          <option>Tucumán</option>
+          <option>Entre Ríos</option>
+          <option>Salta</option>
+          <option>Misiones</option>
+          <option>Chaco</option>
+          <option>Corrientes</option>
+          <option>Santiago del Estero</option>
+          <option>San Juan</option>
+          <option>Jujuy</option>
+          <option>Río Negro</option>
+          <option>Neuquén</option>
+          <option>Formosa</option>
+          <option>Chubut</option>
+          <option>San Luis</option>
+          <option>Catamarca</option>
+          <option>La Rioja</option>
+          <option>La Pampa</option>
+          <option>Santa Cruz</option>
+          <option>Tierra del Fuego</option>
         </select>
         <input 
           type="text" 
