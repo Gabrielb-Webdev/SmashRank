@@ -18,7 +18,7 @@ export default function CreateTournamentPage() {
       name: formData.get('name'),
       description: formData.get('description'),
       game: formData.get('game'),
-      maxParticipants: parseInt(formData.get('maxParticipants') as string),
+      maxPlayers: parseInt(formData.get('maxPlayers') as string),
       startDate: formData.get('startDate'),
       endDate: formData.get('endDate'),
       region: 'Argentina', // Siempre Argentina
@@ -116,7 +116,7 @@ export default function CreateTournamentPage() {
               </label>
               <input
                 type="number"
-                name="maxParticipants"
+                name="maxPlayers"
                 required
                 min="2"
                 max="256"

@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         name: data.name,
         description: data.description || '',
         game: data.game,
-        maxParticipants: data.maxParticipants || 32,
+        maxPlayers: data.maxPlayers || 32,
         startDate: new Date(data.startDate),
         endDate: new Date(data.endDate),
         region: 'Argentina', // Siempre Argentina
