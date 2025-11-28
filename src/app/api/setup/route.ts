@@ -82,16 +82,24 @@ export async function POST() {
 
     // Crear un torneo de ejemplo
     const startDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // En 7 días
+    const endDate = new Date(startDate.getTime() + 2 * 24 * 60 * 60 * 1000) // 2 días después
     const checkInTime = new Date(startDate.getTime() - 15 * 60 * 1000) // 15 min antes
     
     const tournament = await prisma.tournament.create({
       data: {
-        name: 'Torneo Inaugural SmashRank',
+        name: 'Torneo Inaugural SmashRank Argentina 2024',
+        description: 'Torneo nacional de Super Smash Bros Ultimate para jugadores de toda Argentina',
+        game: 'Super Smash Bros. Ultimate',
+        region: 'Argentina',
         startDate,
+        endDate,
         checkInTime,
         format: 'double',
         maxPlayers: 32,
         status: 'upcoming',
+        entryFee: 0,
+        prizePool: 'Premios simbólicos y ranking points',
+        rules: '3 stocks, 7 minutos, stage striking, counterpicks habilitados',
         createdById: admin.id,
         starterStages: ['Battlefield', 'Final Destination', 'Pokemon Stadium 2', 'Smashville'],
         cpStages: ['Kalos Pokemon League', 'Town & City'],

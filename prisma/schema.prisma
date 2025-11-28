@@ -37,13 +37,20 @@ model User {
 model Tournament {
   id            String    @id @default(cuid())
   name          String
+  description   String?
+  game          String    @default("Super Smash Bros. Ultimate")
+  region        String    @default("Argentina")
   startDate     DateTime
+  endDate       DateTime?
   checkInTime   DateTime  // 15 min antes del inicio
+  entryFee      Float     @default(0)
+  prizePool     String?
+  rules         String?
   
   // Configuración
   format        String    // "single" | "double" | "roundrobin"
   maxPlayers    Int
-  status        String    @default("upcoming") // "upcoming" | "checkin" | "ongoing" | "finished"
+  status        String    @default("upcoming") // "upcoming" | "checkin" | "ongoing" | "finished" | "active"
   
   // Stages
   starterStages Json      // ["Battlefield", "FD", "PS2"]
