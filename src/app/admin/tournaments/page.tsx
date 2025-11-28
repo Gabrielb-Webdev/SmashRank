@@ -78,8 +78,10 @@ export default async function AdminTournamentsPage() {
                   </div>
 
                   <div className="mt-3 text-sm text-gray-500">
-                    Inicio: {new Date(tournament.startDate).toLocaleDateString('es-AR')} • 
-                    Fin: {new Date(tournament.endDate).toLocaleDateString('es-AR')}
+                    Inicio: {new Date(tournament.startDate).toLocaleDateString('es-AR')}
+                    {tournament.endDate && (
+                      <> • Fin: {new Date(tournament.endDate).toLocaleDateString('es-AR')}</>
+                    )}
                   </div>
                 </div>
 

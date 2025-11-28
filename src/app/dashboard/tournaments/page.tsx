@@ -152,7 +152,9 @@ export default async function UserTournamentsPage() {
                           +{participation.pointsEarned} puntos
                         </span>
                         <span className="text-gray-500">
-                          {new Date(participation.tournament.endDate).toLocaleDateString('es-AR')}
+                          {participation.tournament.endDate 
+                            ? new Date(participation.tournament.endDate).toLocaleDateString('es-AR')
+                            : 'Sin fecha'}
                         </span>
                       </div>
                     </div>
