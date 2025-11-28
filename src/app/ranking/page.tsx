@@ -172,17 +172,17 @@ export default async function RankingPage() {
 
                       {/* Player */}
                       <td className="p-4">
-                        <div className="flex items-center gap-3">
+                        <a href={`/players/${player.id}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
                             {player.gamertag[0].toUpperCase()}
                           </div>
                           <div>
-                            <div className="font-semibold">{player.gamertag}</div>
+                            <div className="font-semibold text-purple-400">{player.gamertag}</div>
                             {position <= 3 && (
                               <div className="text-xs text-gray-500">Top Player</div>
                             )}
                           </div>
-                        </div>
+                        </a>
                       </td>
 
                       {/* Characters */}

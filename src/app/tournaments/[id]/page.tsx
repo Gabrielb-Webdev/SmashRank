@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { getServerSession } from '@/lib/session'
 import RegisterButton from './RegisterButton'
 import BracketView from '@/components/BracketView'
+import CheckInButton from '@/components/CheckInButton'
+import TournamentCountdown from '@/components/TournamentCountdown'
 
 export const dynamic = 'force-dynamic'
 
@@ -89,6 +91,29 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
 
   const isUserRegistered = tournament.participants.some(p => p.user.id === session?.user?.id)
   const canRegister = tournament.participants.length < tournament.maxPlayers && tournament.status === 'upcoming'
+  
+  // Check-in logic
+  const userParticipation = tournament.participants.find(p => p.user.id === session?.user?.id)
+  const now = new Date()
+  const checkInTime = new Date(tournament.checkInTime)
+  const thirtyMinutesBefore = new Date(checkInTime.getTime() - 30 * 60 * 1000)
+  
+  const canCheckIn = isUserRegistered && 
+                     tournament.status === 'upcoming' && 
+                     now >= thirtyMinutesBefore && 
+                     now <= checkInTime
+  
+  const isCheckedIn = userParticipation?.checkedIn || false
+  
+  let checkInMessage = ''
+  if (tournament.status !== 'upcoming') {
+    checkInMessage = 'El torneo ya ha comenzado'
+  } else if (now < thirtyMinutesBefore) {
+    const minutesLeft = Math.floor((thirtyMinutesBefore.getTime() - now.getTime()) / (1000 * 60))
+    checkInMessage = `Check-in disponible en ${minutesLeft} minutos`
+  } else if (now > checkInTime) {
+    checkInMessage = 'El tiempo de check-in ha finalizado'
+  }
 
   return (
     <div className="container mx-auto px-6 py-12">
@@ -229,6 +254,47 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
 
         {/* Sidebar */}
         <div className="space-y-6">
+          {/* Countdown */}
+          {tournament.status === 'upcoming' && (
+            <TournamentCountdown 
+              startDate={tournament.startDate.toISOString()} 
+              status={tournament.status} 
+            />
+          )}
+
+          {/* Check-in */}
+          {isUserRegistered && tournament.status === 'upcoming' && (
+            <div className="card">
+              <h2 className="text-xl font-bold font-poppins mb-4 gradient-text">
+                Check-in
+              </h2>
+              <CheckInButton
+                tournamentId={params.id}
+                isCheckedIn={isCheckedIn}
+                canCheckIn={canCheckIn}
+                checkInMessage={checkInMessage}
+              />
+              <p className="text-xs text-gray-400 mt-2 text-center">
+                Disponible 30 min antes del check-in
+              </p>
+            </div>
+          )}
+
+          {/* Current Match / Bracket Access */}
+          {tournament.status === 'ongoing' && isUserRegistered && (
+            <div className="card">
+              <h2 className="text-xl font-bold font-poppins mb-4 gradient-text">
+                Tu Match
+              </h2>
+              <Link
+                href={`#bracket`}
+                className="block w-full text-center px-4 py-3 bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white font-semibold rounded-lg hover:opacity-90 transition-all"
+              >
+                Ver Mi Match
+              </Link>
+            </div>
+          )}
+
           {/* Registration */}
           <div className="card">
             <h2 className="text-xl font-bold font-poppins mb-4 gradient-text">
