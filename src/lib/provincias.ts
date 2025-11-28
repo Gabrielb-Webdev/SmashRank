@@ -41,11 +41,11 @@ export const REGIONES_ARGENTINA = {
   'Centro': ['Córdoba', 'Santa Fe', 'Entre Ríos', 'La Pampa'],
   'Patagonia': ['Neuquén', 'Río Negro', 'Chubut', 'Santa Cruz', 'Tierra del Fuego'],
   'AMBA': ['Buenos Aires', 'Ciudad Autónoma de Buenos Aires']
-} as const
+}
 
 export function getRegionFromProvincia(provincia: ProvinciaArgentina): string {
   for (const [region, provincias] of Object.entries(REGIONES_ARGENTINA)) {
-    if (provincias.includes(provincia as any)) {
+    if ((provincias as readonly string[]).includes(provincia)) {
       return region
     }
   }
