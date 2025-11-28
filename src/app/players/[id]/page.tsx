@@ -9,15 +9,8 @@ async function getUserProfile(id: string) {
   try {
     const user = await prisma.user.findUnique({
       where: { id },
-      select: {
-        id: true,
-        gamertag: true,
-        email: true,
-        points: true,
-        mainCharacter: true,
-        region: true,
-        createdAt: true,
-        participations: {
+      include: {
+        tournaments: {
           include: {
             tournament: {
               select: {
