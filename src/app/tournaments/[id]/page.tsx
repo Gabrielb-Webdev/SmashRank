@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getServerSession } from '@/lib/session'
 import RegisterButton from './RegisterButton'
+import BracketView from '@/components/BracketView'
 
 export const dynamic = 'force-dynamic'
 
@@ -165,6 +166,29 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
               </div>
             </div>
           </div>
+
+          {/* Bracket */}
+          {tournament.matches && tournament.matches.length > 0 && (
+            <div className="card">
+              <BracketView 
+                matches={tournament.matches.map((m: any) => ({
+                  id: m.id,
+                  round: m.round,
+                  player1Id: m.player1Id,
+                  player2Id: m.player2Id,
+                  player1: m.player1 ? { id: m.player1.id || '', gamertag: m.player1.gamertag } : undefined,
+                  player2: m.player2 ? { id: m.player2.id || '', gamertag: m.player2.gamertag } : undefined,
+                  winnerId: m.winnerId,
+                  player1Score: m.player1Score || 0,
+                  player2Score: m.player2Score || 0,
+                  status: m.status,
+                  position: 0,
+                  bestOf: m.bestOf || 3
+                }))}
+                format={tournament.format as 'single' | 'double'}
+              />
+            </div>
+          )}
 
           {/* Participants List */}
           <div className="card">

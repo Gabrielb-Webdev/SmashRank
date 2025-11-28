@@ -2,6 +2,7 @@
 
 import { organizeBracketByRounds } from '@/lib/bracket'
 import type { BracketMatch } from '@/lib/bracket'
+import ReportResultModal from './ReportResultModal'
 
 type Props = {
   matches: BracketMatch[]
@@ -125,10 +126,15 @@ function MatchCard({ match }: { match: BracketMatch }) {
       </div>
 
       {/* Report Result Button */}
-      {isPending && (
-        <button className="w-full mt-3 px-3 py-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 rounded-lg text-sm font-medium transition-colors border border-purple-500/30">
-          Reportar Resultado
-        </button>
+      {isPending && match.player1 && match.player2 && (
+        <div className="mt-3">
+          <ReportResultModal 
+            matchId={match.id}
+            player1={{ id: match.player1.id, gamertag: match.player1.gamertag }}
+            player2={{ id: match.player2.id, gamertag: match.player2.gamertag }}
+            bestOf={match.bestOf || 3}
+          />
+        </div>
       )}
     </div>
   )

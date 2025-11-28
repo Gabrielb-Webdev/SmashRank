@@ -11,6 +11,7 @@ export type BracketMatch = {
   player2Score: number
   status: string
   position: number
+  bestOf?: number
 }
 
 export type BracketRound = {

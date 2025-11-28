@@ -5,6 +5,7 @@ import Link from 'next/link'
 import BracketView from '@/components/BracketView'
 import ReportResultModal from '@/components/ReportResultModal'
 import GenerateBracketButton from './GenerateBracketButton'
+import DeleteTournamentButton from './DeleteTournamentButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -121,8 +122,16 @@ export default async function AdminTournamentDetailPage({ params }: { params: { 
                 href={`/tournaments/${tournament.id}`}
                 className="btn-secondary py-2 px-4"
               >
-                Vista Pública
+                👁️ Vista Pública
               </Link>
+              {tournament.status !== 'finished' && (
+                <Link 
+                  href={`/admin/tournaments/${tournament.id}/edit`}
+                  className="btn-primary py-2 px-4"
+                >
+                  ✏️ Editar
+                </Link>
+              )}
             </div>
           </div>
 
@@ -216,7 +225,8 @@ export default async function AdminTournamentDetailPage({ params }: { params: { 
                     player1Score: m.player1Score,
                     player2Score: m.player2Score,
                     status: m.status,
-                    position: 0
+                    position: 0,
+                    bestOf: m.bestOf
                   }))}
                   format={tournament.format as 'single' | 'double'}
                 />
@@ -262,9 +272,7 @@ export default async function AdminTournamentDetailPage({ params }: { params: { 
                 {tournament.status === 'upcoming' && tournament.matches.length === 0 && (
                   <GenerateBracketButton tournamentId={tournament.id} />
                 )}
-                <button className="w-full px-4 py-2 bg-red-500/20 text-red-400 rounded-lg border border-red-500/30 hover:bg-red-500/30 transition-colors">
-                  Eliminar Torneo
-                </button>
+                <DeleteTournamentButton tournamentId={tournament.id} />
               </div>
             </div>
           </div>

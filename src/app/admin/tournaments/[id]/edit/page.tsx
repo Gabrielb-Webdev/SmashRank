@@ -1,12 +1,34 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
-export default function CreateTournamentPage() {
+export default function EditTournamentPage({ params }: { params: { id: string } }) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [loadingData, setLoadingData] = useState(true)
   const [error, setError] = useState('')
+  const [tournament, setTournament] = useState<any>(null)
+
+  useEffect(() => {
+    async function loadTournament() {
+      try {
+        const res = await fetch(`/api/tournaments/${params.id}`)
+        if (res.ok) {
+          const data = await res.json()
+          setTournament(data)
+        } else {
+          setError('Torneo no encontrado')
+        }
+      } catch (err) {
+        setError('Error al cargar torneo')
+      } finally {
+        setLoadingData(false)
+      }
+    }
+    loadTournament()
+  }, [params.id])
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -29,26 +51,26 @@ export default function CreateTournamentPage() {
       format: formData.get('format'),
       maxPlayers: parseInt(formData.get('maxPlayers') as string),
       startDate: startTime ? `${startDate}T${startTime}:00` : startDate,
-      endDate: endTime ? `${endDate}T${endTime}:00` : endDate,
+      endDate: endTime && endDate ? `${endDate}T${endTime}:00` : null,
       checkInTime: checkInTime ? `${startDate}T${checkInTime}:00` : startDate,
-      region: 'Argentina',
       entryFee: parseFloat(formData.get('entryFee') as string) || 0,
       prizePool: formData.get('prizePool'),
       rules: formData.get('rules')
     }
 
     try {
-      const res = await fetch('/api/admin/tournaments/create', {
-        method: 'POST',
+      const res = await fetch(`/api/admin/tournaments/${params.id}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       })
 
       if (res.ok) {
+        alert('✅ Torneo actualizado exitosamente')
         router.push('/admin/tournaments')
       } else {
         const error = await res.json()
-        setError(error.error || 'Error al crear torneo')
+        setError(error.error || 'Error al actualizar torneo')
       }
     } catch (err) {
       setError('Error de conexión')
@@ -57,14 +79,52 @@ export default function CreateTournamentPage() {
     }
   }
 
+  if (loadingData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <p className="text-gray-400">Cargando torneo...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!tournament) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-400 text-xl mb-4">{error || 'Torneo no encontrado'}</p>
+          <Link href="/admin/tournaments" className="btn-primary">
+            Volver
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  // Extraer fecha y hora
+  const startDateTime = new Date(tournament.startDate)
+  const endDateTime = tournament.endDate ? new Date(tournament.endDate) : null
+  const checkInDateTime = new Date(tournament.checkInTime)
+
+  const startDateStr = startDateTime.toISOString().split('T')[0]
+  const startTimeStr = startDateTime.toTimeString().slice(0, 5)
+  const endDateStr = endDateTime ? endDateTime.toISOString().split('T')[0] : ''
+  const endTimeStr = endDateTime ? endDateTime.toTimeString().slice(0, 5) : ''
+  const checkInTimeStr = checkInDateTime.toTimeString().slice(0, 5)
+
   return (
     <div className="min-h-screen py-12 px-4">
       <div className="container mx-auto max-w-3xl">
         <div className="mb-8">
+          <Link href="/admin/tournaments" className="text-purple-400 hover:text-purple-300 mb-4 inline-block">
+            ← Volver a Gestión de Torneos
+          </Link>
           <h1 className="text-4xl font-extrabold font-poppins gradient-text mb-2">
-            Crear Nuevo Torneo
+            Editar Torneo
           </h1>
-          <p className="text-gray-400">Configura los detalles del torneo para Argentina</p>
+          <p className="text-gray-400">{tournament.name}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="card p-8">
@@ -84,7 +144,7 @@ export default function CreateTournamentPage() {
                 type="text"
                 name="name"
                 required
-                placeholder="Ej: Torneo Nacional Argentina 2024"
+                defaultValue={tournament.name}
                 className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
               />
             </div>
@@ -98,7 +158,7 @@ export default function CreateTournamentPage() {
                 name="description"
                 required
                 rows={3}
-                placeholder="Describe el torneo, formato, premios, etc."
+                defaultValue={tournament.description}
                 className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
               />
             </div>
@@ -111,6 +171,7 @@ export default function CreateTournamentPage() {
               <select
                 name="game"
                 required
+                defaultValue={tournament.game}
                 className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
               >
                 <option value="Super Smash Bros. Ultimate">Super Smash Bros. Ultimate</option>
@@ -127,14 +188,12 @@ export default function CreateTournamentPage() {
               <select
                 name="format"
                 required
+                defaultValue={tournament.format}
                 className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
               >
                 <option value="single">Single Elimination</option>
                 <option value="double">Double Elimination</option>
               </select>
-              <p className="text-xs text-gray-500 mt-1">
-                Single: eliminación directa | Double: bracket de ganadores y perdedores
-              </p>
             </div>
 
             {/* Max Participantes */}
@@ -148,7 +207,7 @@ export default function CreateTournamentPage() {
                 required
                 min="2"
                 max="256"
-                defaultValue="32"
+                defaultValue={tournament.maxPlayers}
                 className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
               />
             </div>
@@ -164,12 +223,14 @@ export default function CreateTournamentPage() {
                     type="date"
                     name="startDate"
                     required
+                    defaultValue={startDateStr}
                     className="px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
                   />
                   <input
                     type="time"
                     name="startTime"
                     required
+                    defaultValue={startTimeStr}
                     className="px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
                   />
                 </div>
@@ -182,11 +243,13 @@ export default function CreateTournamentPage() {
                   <input
                     type="date"
                     name="endDate"
+                    defaultValue={endDateStr}
                     className="px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
                   />
                   <input
                     type="time"
                     name="endTime"
+                    defaultValue={endTimeStr}
                     className="px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
                   />
                 </div>
@@ -202,11 +265,9 @@ export default function CreateTournamentPage() {
                 type="time"
                 name="checkInTime"
                 required
+                defaultValue={checkInTimeStr}
                 className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
               />
-              <p className="text-xs text-gray-500 mt-1">
-                Los jugadores deben hacer check-in a esta hora el día del torneo
-              </p>
             </div>
 
             {/* Entry Fee y Prize Pool */}
@@ -220,8 +281,7 @@ export default function CreateTournamentPage() {
                   name="entryFee"
                   min="0"
                   step="0.01"
-                  defaultValue="0"
-                  placeholder="0 para gratuito"
+                  defaultValue={tournament.entryFee}
                   className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
                 />
               </div>
@@ -232,7 +292,7 @@ export default function CreateTournamentPage() {
                 <input
                   type="text"
                   name="prizePool"
-                  placeholder="Ej: $50,000 ARS"
+                  defaultValue={tournament.prizePool || ''}
                   className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
                 />
               </div>
@@ -246,25 +306,9 @@ export default function CreateTournamentPage() {
               <textarea
                 name="rules"
                 rows={5}
-                placeholder="Define las reglas del torneo: formato, stocks, tiempo, mapas permitidos, etc."
+                defaultValue={tournament.rules || ''}
                 className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
               />
-            </div>
-
-            {/* Region (readonly) */}
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Región
-              </label>
-              <input
-                type="text"
-                value="🇦🇷 Argentina"
-                disabled
-                className="w-full px-4 py-3 bg-black/50 border border-gray-500/30 rounded-lg text-gray-400 cursor-not-allowed"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                SmashRank actualmente solo opera en Argentina
-              </p>
             </div>
           </div>
 
@@ -283,7 +327,7 @@ export default function CreateTournamentPage() {
               className="btn-primary flex-1"
               disabled={loading}
             >
-              {loading ? 'Creando...' : '🏆 Crear Torneo'}
+              {loading ? 'Guardando...' : '💾 Guardar Cambios'}
             </button>
           </div>
         </form>
