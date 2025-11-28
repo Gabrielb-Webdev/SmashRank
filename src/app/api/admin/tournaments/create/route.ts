@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/session'
 import { prisma } from '@/lib/prisma'
 
+// API para crear torneos - Argentina only
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession()
