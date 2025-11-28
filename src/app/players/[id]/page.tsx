@@ -15,7 +15,6 @@ async function getUserProfile(id: string) {
         email: true,
         points: true,
         mainCharacter: true,
-        secondaryCharacter: true,
         region: true,
         createdAt: true,
         participations: {
@@ -94,11 +93,6 @@ export default async function PlayerProfilePage({ params }: { params: { id: stri
                 {user.mainCharacter && (
                   <span className="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm">
                     Main: {user.mainCharacter}
-                  </span>
-                )}
-                {user.secondaryCharacter && (
-                  <span className="px-3 py-1 bg-pink-500/20 text-pink-400 rounded-full text-sm">
-                    Secondary: {user.secondaryCharacter}
                   </span>
                 )}
               </div>
