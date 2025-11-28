@@ -80,20 +80,23 @@ export async function POST(
         // Determinar best-of según la ronda
         const bestOf = roundConfig[match.round] || 3
 
+        const matchData: any = {
+          tournamentId: tournament.id,
+          round: match.round,
+          bestOf,
+          status: match.player1Id && match.player2Id ? 'pending' : 'waiting',
+          p1CheckedIn: false,
+          p2CheckedIn: false,
+          currentStage: null,
+          p1Character: null,
+          p2Character: null
+        }
+
+        if (match.player1Id) matchData.player1Id = match.player1Id
+        if (match.player2Id) matchData.player2Id = match.player2Id
+
         return prisma.match.create({
-          data: {
-            tournamentId: tournament.id,
-            round: match.round,
-            bestOf,
-            player1Id: match.player1Id || undefined,
-            player2Id: match.player2Id || undefined,
-            status: match.player1Id && match.player2Id ? 'pending' : 'waiting',
-            p1CheckedIn: false,
-            p2CheckedIn: false,
-            currentStage: null,
-            p1Character: null,
-            p2Character: null
-          }
+          data: matchData
         })
       })
     )
