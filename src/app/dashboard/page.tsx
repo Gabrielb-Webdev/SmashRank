@@ -48,11 +48,16 @@ export default async function DashboardPage() {
     <div className="min-h-screen py-12 px-4">
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-extrabold font-poppins gradient-text mb-2">
-            Mi Dashboard
-          </h1>
-          <p className="text-gray-400">Bienvenido, <span className="text-purple-400 font-semibold">{user.gamertag}</span></p>
+        <div className="mb-8 flex justify-between items-center flex-wrap gap-4">
+          <div>
+            <h1 className="text-4xl font-extrabold font-poppins gradient-text mb-2">
+              Mi Dashboard
+            </h1>
+            <p className="text-gray-400">Bienvenido, <span className="text-purple-400 font-semibold">{user.gamertag}</span></p>
+          </div>
+          <Link href="/dashboard/edit" className="btn-secondary">
+            ✏️ Editar Perfil
+          </Link>
         </div>
 
         {/* Stats Cards */}
