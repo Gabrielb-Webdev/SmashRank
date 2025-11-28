@@ -30,7 +30,6 @@ export default async function AdminTournamentDetailPage({ params }: { params: { 
       startDate: true,
       endDate: true,
       checkInTime: true,
-      creatorId: true,
       roundConfig: true,
       pointsConfig: true,
       creator: {
