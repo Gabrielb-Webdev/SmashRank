@@ -3,6 +3,7 @@ import { Inter, Poppins } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import SessionProvider from '@/components/SessionProvider'
+import SmashDecoration from '@/components/SmashDecoration'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -29,8 +30,9 @@ export default function RootLayout({
     <html lang="es" className={`${inter.variable} ${poppins.variable}`}>
       <body className="bg-[#0A0118] text-white antialiased">
         <SessionProvider>
+          <SmashDecoration />
           <Navbar />
-          <main className="pt-20">
+          <main className="pt-20 relative z-10">
             {children}
           </main>
         </SessionProvider>
