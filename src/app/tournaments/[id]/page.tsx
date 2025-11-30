@@ -64,11 +64,20 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
     notFound()
   }
 
-  // Calcular el status real basado en las fechas
+  // Calcular el status real basado en las fechas (todas en UTC para comparar correctamente)
   const now = new Date()
   const startDate = new Date(tournament.startDate)
   const checkInTime = new Date(tournament.checkInTime)
   const thirtyMinutesBefore = new Date(checkInTime.getTime() - 30 * 60 * 1000)
+  
+  // Log para debug (puedes eliminar después)
+  console.log('Fechas para debug:', {
+    ahora: now.toISOString(),
+    inicio: startDate.toISOString(),
+    checkIn: checkInTime.toISOString(),
+    ahoraMilisec: now.getTime(),
+    inicioMilisec: startDate.getTime()
+  })
   
   let actualStatus = tournament.status
   
@@ -102,12 +111,13 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
   }
 
   const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('es-ES', {
+    return new Intl.DateTimeFormat('es-AR', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
+      hour12: false,
       timeZone: 'America/Argentina/Buenos_Aires'
     }).format(new Date(date))
   }

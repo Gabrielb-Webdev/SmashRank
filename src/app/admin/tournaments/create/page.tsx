@@ -22,15 +22,19 @@ export default function CreateTournamentPage() {
     const endTime = formData.get('endTime') as string
     const checkInTime = formData.get('checkInTime') as string
     
+    // Crear fechas en zona horaria de Argentina (UTC-3)
+    const argTimezone = 'America/Argentina/Buenos_Aires'
+    
     const data = {
       name: formData.get('name'),
       description: formData.get('description'),
       game: formData.get('game'),
       format: formData.get('format'),
       maxPlayers: parseInt(formData.get('maxPlayers') as string),
-      startDate: startTime ? `${startDate}T${startTime}:00` : startDate,
-      endDate: endTime ? `${endDate}T${endTime}:00` : endDate,
-      checkInTime: checkInTime ? `${startDate}T${checkInTime}:00` : startDate,
+      // Enviar con la zona horaria de Argentina explícita
+      startDate: startTime ? `${startDate}T${startTime}:00-03:00` : `${startDate}T00:00:00-03:00`,
+      endDate: endTime ? `${endDate}T${endTime}:00-03:00` : `${endDate}T23:59:59-03:00`,
+      checkInTime: checkInTime ? `${startDate}T${checkInTime}:00-03:00` : `${startDate}T00:00:00-03:00`,
       region: formData.get('region'),
       entryFee: parseFloat(formData.get('entryFee') as string) || 0,
       prizePool: formData.get('prizePool'),
