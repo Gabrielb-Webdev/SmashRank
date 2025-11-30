@@ -145,7 +145,6 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-            ) : (
               <>
                 <Link 
                   href="/login" 
@@ -160,7 +159,8 @@ export default function Navbar() {
                   Registrarse
                 </Link>
               </>
-            )}v>
+            )}
+          </div>
 
           {/* Mobile Menu Button */}
           <button
