@@ -64,6 +64,28 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
     notFound()
   }
 
+  // Calcular el status real basado en las fechas
+  const now = new Date()
+  const startDate = new Date(tournament.startDate)
+  const checkInTime = new Date(tournament.checkInTime)
+  const thirtyMinutesBefore = new Date(checkInTime.getTime() - 30 * 60 * 1000)
+  
+  let actualStatus = tournament.status
+  
+  // Determinar el status real basándose en las fechas
+  if (tournament.status === 'finished') {
+    actualStatus = 'finished'
+  } else if (now >= startDate) {
+    // Si ya pasó la fecha de inicio, debería estar 'ongoing' o 'finished'
+    actualStatus = tournament.matches.length > 0 ? 'ongoing' : 'checkin'
+  } else if (now >= thirtyMinutesBefore && now < startDate) {
+    // Si estamos en la ventana de check-in
+    actualStatus = 'checkin'
+  } else {
+    // Si aún no llega la fecha de check-in
+    actualStatus = 'upcoming'
+  }
+
   const getStatusBadge = (status: string) => {
     const badges: Record<string, { text: string; class: string }> = {
       upcoming: { text: 'Próximo', class: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
@@ -85,33 +107,40 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
       month: 'long',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      timeZone: 'America/Argentina/Buenos_Aires'
     }).format(new Date(date))
   }
 
   const isUserRegistered = tournament.participants.some(p => p.user.id === session?.user?.id)
-  const canRegister = tournament.participants.length < tournament.maxPlayers && tournament.status === 'upcoming'
+  const canRegister = tournament.participants.length < tournament.maxPlayers && actualStatus === 'upcoming'
   
   // Check-in logic
   const userParticipation = tournament.participants.find(p => p.user.id === session?.user?.id)
-  const now = new Date()
-  const checkInTime = new Date(tournament.checkInTime)
-  const thirtyMinutesBefore = new Date(checkInTime.getTime() - 30 * 60 * 1000)
   
   const canCheckIn = isUserRegistered && 
-                     tournament.status === 'upcoming' && 
+                     actualStatus === 'checkin' && 
                      now >= thirtyMinutesBefore && 
-                     now <= checkInTime
+                     now <= startDate
   
   const isCheckedIn = userParticipation?.checkedIn || false
   
   let checkInMessage = ''
-  if (tournament.status !== 'upcoming') {
+  if (actualStatus === 'ongoing' || actualStatus === 'finished') {
     checkInMessage = 'El torneo ya ha comenzado'
   } else if (now < thirtyMinutesBefore) {
     const minutesLeft = Math.floor((thirtyMinutesBefore.getTime() - now.getTime()) / (1000 * 60))
-    checkInMessage = `Check-in disponible en ${minutesLeft} minutos`
-  } else if (now > checkInTime) {
+    const hoursLeft = Math.floor(minutesLeft / 60)
+    const daysLeft = Math.floor(hoursLeft / 24)
+    
+    if (daysLeft > 0) {
+      checkInMessage = `Check-in disponible en ${daysLeft} día${daysLeft > 1 ? 's' : ''} y ${hoursLeft % 24} hora${hoursLeft % 24 !== 1 ? 's' : ''}`
+    } else if (hoursLeft > 0) {
+      checkInMessage = `Check-in disponible en ${hoursLeft} hora${hoursLeft > 1 ? 's' : ''} y ${minutesLeft % 60} minuto${minutesLeft % 60 !== 1 ? 's' : ''}`
+    } else {
+      checkInMessage = `Check-in disponible en ${minutesLeft} minuto${minutesLeft > 1 ? 's' : ''}`
+    }
+  } else if (now > startDate) {
     checkInMessage = 'El tiempo de check-in ha finalizado'
   }
 
@@ -133,7 +162,7 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
             </p>
           </div>
           <div className="flex items-center gap-4">
-            {session?.user?.role === 'admin' && (tournament.status === 'checkin' || tournament.status === 'upcoming') && (
+            {session?.user?.role === 'admin' && (actualStatus === 'checkin' || actualStatus === 'upcoming') && (
               <form action={`/api/tournaments/${params.id}/start`} method="POST">
                 <button
                   type="submit"
@@ -143,7 +172,7 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
                 </button>
               </form>
             )}
-            {(tournament.status === 'ongoing' || tournament.status === 'finished') && (
+            {(actualStatus === 'ongoing' || actualStatus === 'finished') && (
               <Link 
                 href={`/tournaments/${params.id}/bracket`}
                 className="bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white px-6 py-2 rounded-lg hover:opacity-90 transition-all"
@@ -151,7 +180,7 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
                 Ver Bracket
               </Link>
             )}
-            {getStatusBadge(tournament.status)}
+            {getStatusBadge(actualStatus)}
           </div>
         </div>
       </div>
@@ -255,15 +284,15 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Countdown */}
-          {tournament.status === 'upcoming' && (
+          {actualStatus === 'upcoming' && (
             <TournamentCountdown 
               startDate={tournament.startDate.toISOString()} 
-              status={tournament.status} 
+              status={actualStatus} 
             />
           )}
 
           {/* Check-in */}
-          {isUserRegistered && tournament.status === 'upcoming' && (
+          {isUserRegistered && (actualStatus === 'upcoming' || actualStatus === 'checkin') && (
             <div className="card">
               <h2 className="text-xl font-bold font-poppins mb-4 gradient-text">
                 Check-in
@@ -281,7 +310,7 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
           )}
 
           {/* Current Match / Bracket Access */}
-          {tournament.status === 'ongoing' && isUserRegistered && (
+          {actualStatus === 'ongoing' && isUserRegistered && (
             <div className="card">
               <h2 className="text-xl font-bold font-poppins mb-4 gradient-text">
                 Tu Match
@@ -315,7 +344,7 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
                   </p>
                   <RegisterButton tournamentId={params.id} />
                 </div>
-              ) : tournament.status === 'finished' ? (
+              ) : actualStatus === 'finished' ? (
                 <div className="text-center text-gray-400">
                   <p className="mb-2">Torneo finalizado</p>
                 </div>
