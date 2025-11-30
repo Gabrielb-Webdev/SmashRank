@@ -2,6 +2,8 @@
 
 Plataforma de torneos y ranking para Super Smash Bros Ultimate
 
+**🌐 En Producción:** https://smash-rank.vercel.app
+
 ## 🚀 Características
 
 - ✅ Sistema de torneos con brackets tipo start.gg
