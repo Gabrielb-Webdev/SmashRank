@@ -171,23 +171,31 @@ export default async function TournamentDetailPage({ params }: { params: { id: s
               Organizado por <span className="text-purple-400">{tournament.creator.gamertag}</span>
             </p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3">
+            {session?.user?.role === 'admin' && (
+              <Link
+                href={`/admin/tournaments/${params.id}/edit`}
+                className="btn-secondary text-sm px-4 py-2"
+              >
+                ✏️ Editar
+              </Link>
+            )}
             {session?.user?.role === 'admin' && (actualStatus === 'checkin' || actualStatus === 'upcoming') && (
               <form action={`/api/tournaments/${params.id}/start`} method="POST">
                 <button
                   type="submit"
-                  className="bg-green-500 text-white px-6 py-2 rounded-lg hover:opacity-90 transition-all"
+                  className="btn-success text-sm px-4 py-2"
                 >
-                  Iniciar Torneo
+                  ▶️ Iniciar Torneo
                 </button>
               </form>
             )}
             {(actualStatus === 'ongoing' || actualStatus === 'finished') && (
               <Link 
                 href={`/tournaments/${params.id}/bracket`}
-                className="bg-gradient-to-r from-[#7C3AED] to-[#EC4899] text-white px-6 py-2 rounded-lg hover:opacity-90 transition-all"
+                className="btn-primary text-sm px-4 py-2"
               >
-                Ver Bracket
+                🏆 Ver Bracket
               </Link>
             )}
             {getStatusBadge(actualStatus)}

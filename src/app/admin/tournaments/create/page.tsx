@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function CreateTournamentPage() {
   const router = useRouter()
@@ -21,9 +22,6 @@ export default function CreateTournamentPage() {
     const endDate = formData.get('endDate') as string
     const endTime = formData.get('endTime') as string
     const checkInTime = formData.get('checkInTime') as string
-    
-    // Crear fechas en zona horaria de Argentina (UTC-3)
-    const argTimezone = 'America/Argentina/Buenos_Aires'
     
     const data = {
       name: formData.get('name'),
@@ -50,6 +48,7 @@ export default function CreateTournamentPage() {
 
       if (res.ok) {
         router.push('/admin/tournaments')
+        router.refresh()
       } else {
         const error = await res.json()
         setError(error.error || 'Error al crear torneo')
@@ -61,61 +60,76 @@ export default function CreateTournamentPage() {
     }
   }
 
+  const maxPlayersOptions = [4, 8, 16, 24, 32, 48, 64, 128, 256]
+
   return (
     <div className="min-h-screen py-12 px-4">
-      <div className="container mx-auto max-w-3xl">
+      <div className="container mx-auto max-w-4xl">
+        {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-extrabold font-poppins gradient-text mb-2">
-            Crear Nuevo Torneo
+          <Link 
+            href="/admin/tournaments" 
+            className="text-purple-400 hover:text-purple-300 mb-4 inline-flex items-center gap-2 transition-all"
+          >
+            <span>←</span> Volver a Gestión de Torneos
+          </Link>
+          <h1 className="text-5xl font-extrabold font-poppins gradient-text mb-3 mt-4">
+            ✨ Crear Nuevo Torneo
           </h1>
-          <p className="text-gray-400">Configura los detalles del torneo para Argentina</p>
+          <p className="text-gray-400 text-lg">Configura todos los detalles para tu torneo de Smash en Argentina</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="card p-8">
+        <form onSubmit={handleSubmit} className="card p-8 space-y-8">
           {error && (
-            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400">
-              {error}
+            <div className="p-4 bg-red-500/10 border-2 border-red-500/50 rounded-xl text-red-400 font-medium">
+              ⚠️ {error}
             </div>
           )}
 
+          {/* Información Básica */}
           <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-purple-400 flex items-center gap-2">
+              <span className="text-3xl">🎮</span> Información Básica
+            </h2>
+            
             {/* Nombre */}
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm font-semibold mb-3 text-gray-300">
                 Nombre del Torneo *
               </label>
               <input
                 type="text"
                 name="name"
                 required
-                placeholder="Ej: Torneo Nacional Argentina 2024"
-                className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
+                placeholder="Ej: TRUE COMBO WEEKLIES #45"
+                className="input w-full"
               />
             </div>
 
             {/* Descripción */}
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block text-sm font-semibold mb-3 text-gray-300">
                 Descripción *
               </label>
               <textarea
                 name="description"
                 required
-                rows={3}
-                placeholder="Describe el torneo, formato, premios, etc."
-                className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
+                rows={4}
+                placeholder="Describe el torneo, premios, reglas especiales, etc."
+                className="input w-full resize-none"
               />
             </div>
 
             {/* Juego */}
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Juego *
+              <label className="block text-sm font-semibold mb-3 text-gray-300">
+                🎯 Juego *
               </label>
               <select
                 name="game"
                 required
-                className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
+                defaultValue="Super Smash Bros. Ultimate"
+                className="select-fancy w-full"
               >
                 <option value="Super Smash Bros. Ultimate">Super Smash Bros. Ultimate</option>
                 <option value="Super Smash Bros. Melee">Super Smash Bros. Melee</option>
@@ -123,148 +137,137 @@ export default function CreateTournamentPage() {
               </select>
             </div>
 
-            {/* Formato de Bracket */}
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Formato de Bracket *
-              </label>
-              <select
-                name="format"
-                required
-                className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
-              >
-                <option value="single">Single Elimination</option>
-                <option value="double">Double Elimination</option>
-              </select>
-              <p className="text-xs text-gray-500 mt-1">
-                Single: eliminación directa | Double: bracket de ganadores y perdedores
-              </p>
-            </div>
-
-            {/* Max Participantes */}
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Máximo de Participantes *
-              </label>
-              <input
-                type="number"
-                name="maxPlayers"
-                required
-                min="2"
-                max="256"
-                defaultValue="32"
-                className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
-              />
-            </div>
-
-            {/* Fechas */}
+            {/* Formato y Participantes */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium mb-2">
-                  Fecha de Inicio *
+                <label className="block text-sm font-semibold mb-3 text-gray-300">
+                  🏆 Formato de Bracket *
                 </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="date"
-                    name="startDate"
-                    required
-                    className="px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
-                  />
-                  <input
-                    type="time"
-                    name="startTime"
-                    required
-                    className="px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
-                  />
-                </div>
+                <select
+                  name="format"
+                  required
+                  defaultValue="double"
+                  className="select-fancy w-full"
+                >
+                  <option value="single">Single Elimination</option>
+                  <option value="double">Double Elimination</option>
+                </select>
+                <p className="text-xs text-gray-500 mt-2 ml-1">
+                  💡 Double es recomendado para torneos competitivos
+                </p>
               </div>
+
               <div>
-                <label className="block text-sm font-medium mb-2">
-                  Fecha de Fin
+                <label className="block text-sm font-semibold mb-3 text-gray-300">
+                  👥 Máximo de Participantes *
                 </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="date"
-                    name="endDate"
-                    className="px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
-                  />
-                  <input
-                    type="time"
-                    name="endTime"
-                    className="px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
-                  />
-                </div>
+                <select
+                  name="maxPlayers"
+                  required
+                  defaultValue="32"
+                  className="select-fancy w-full"
+                >
+                  {maxPlayersOptions.map(num => (
+                    <option key={num} value={num}>{num} jugadores</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Fechas y Horarios */}
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-purple-400 flex items-center gap-2">
+              <span className="text-3xl">📅</span> Fechas y Horarios
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Fecha de Inicio */}
+              <div>
+                <label className="block text-sm font-semibold mb-3 text-gray-300">
+                  📆 Fecha de Inicio *
+                </label>
+                <input
+                  type="date"
+                  name="startDate"
+                  required
+                  className="date-input w-full"
+                />
+              </div>
+
+              {/* Hora de Inicio */}
+              <div>
+                <label className="block text-sm font-semibold mb-3 text-gray-300">
+                  🕐 Hora de Inicio *
+                </label>
+                <input
+                  type="time"
+                  name="startTime"
+                  required
+                  className="time-input w-full"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Fecha de Fin */}
+              <div>
+                <label className="block text-sm font-semibold mb-3 text-gray-300">
+                  📆 Fecha de Fin (Opcional)
+                </label>
+                <input
+                  type="date"
+                  name="endDate"
+                  className="date-input w-full"
+                />
+              </div>
+
+              {/* Hora de Fin */}
+              <div>
+                <label className="block text-sm font-semibold mb-3 text-gray-300">
+                  🕐 Hora de Fin (Opcional)
+                </label>
+                <input
+                  type="time"
+                  name="endTime"
+                  className="time-input w-full"
+                />
               </div>
             </div>
 
             {/* Check-in Time */}
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Hora de Check-in *
+              <label className="block text-sm font-semibold mb-3 text-gray-300">
+                ⏰ Hora de Check-in *
               </label>
               <input
                 type="time"
                 name="checkInTime"
                 required
-                className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
+                className="time-input w-full md:w-1/2"
               />
-              <p className="text-xs text-gray-500 mt-1">
-                Los jugadores deben hacer check-in a esta hora el día del torneo
+              <p className="text-xs text-gray-500 mt-2 ml-1">
+                💡 Los jugadores podrán hacer check-in 30 minutos antes de esta hora
               </p>
             </div>
+          </div>
 
-            {/* Entry Fee y Prize Pool */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Costo de Entrada (ARS)
-                </label>
-                <input
-                  type="number"
-                  name="entryFee"
-                  min="0"
-                  step="0.01"
-                  defaultValue="0"
-                  placeholder="0 para gratuito"
-                  className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Pozo de Premios
-                </label>
-                <input
-                  type="text"
-                  name="prizePool"
-                  placeholder="Ej: $50,000 ARS"
-                  className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
-                />
-              </div>
-            </div>
-
-            {/* Reglas */}
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Reglas del Torneo
-              </label>
-              <textarea
-                name="rules"
-                rows={5}
-                placeholder="Define las reglas del torneo: formato, stocks, tiempo, mapas permitidos, etc."
-                className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
-              />
-            </div>
+          {/* Ubicación y Costos */}
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-purple-400 flex items-center gap-2">
+              <span className="text-3xl">📍</span> Ubicación y Costos
+            </h2>
 
             {/* Provincia */}
             <div>
-              <label className="block text-sm font-medium mb-2">
-                Provincia *
+              <label className="block text-sm font-semibold mb-3 text-gray-300">
+                🗺️ Provincia *
               </label>
               <select
                 name="region"
                 required
                 defaultValue="Buenos Aires"
-                className="w-full px-4 py-3 bg-black/30 border border-purple-500/30 rounded-lg focus:outline-none focus:border-purple-500"
+                className="select-fancy w-full"
               >
                 <option value="Buenos Aires">Buenos Aires</option>
                 <option value="Ciudad Autónoma de Buenos Aires">Ciudad Autónoma de Buenos Aires (CABA)</option>
@@ -291,28 +294,83 @@ export default function CreateTournamentPage() {
                 <option value="Tierra del Fuego">Tierra del Fuego</option>
                 <option value="Tucumán">Tucumán</option>
               </select>
-              <p className="text-xs text-gray-500 mt-1">
-                Selecciona la provincia donde se realizará el torneo
-              </p>
+            </div>
+
+            {/* Entry Fee y Prize Pool */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-semibold mb-3 text-gray-300">
+                  💵 Costo de Entrada (ARS)
+                </label>
+                <input
+                  type="number"
+                  name="entryFee"
+                  min="0"
+                  step="0.01"
+                  defaultValue="0"
+                  placeholder="0 = Gratis"
+                  className="input w-full"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold mb-3 text-gray-300">
+                  🏅 Pozo de Premios
+                </label>
+                <input
+                  type="text"
+                  name="prizePool"
+                  placeholder="Ej: $50,000 ARS"
+                  className="input w-full"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Reglas */}
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-purple-400 flex items-center gap-2">
+              <span className="text-3xl">📋</span> Reglas del Torneo
+            </h2>
+            
+            <div>
+              <label className="block text-sm font-semibold mb-3 text-gray-300">
+                Reglas (Opcional)
+              </label>
+              <textarea
+                name="rules"
+                rows={6}
+                placeholder="Define las reglas: formato (3 stocks, 7 min), stages permitidos, DSR, coaching, etc."
+                className="input w-full resize-none"
+              />
             </div>
           </div>
 
           {/* Buttons */}
-          <div className="flex gap-4 mt-8">
+          <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-purple-500/20">
             <button
               type="button"
               onClick={() => router.back()}
               className="btn-secondary flex-1"
               disabled={loading}
             >
-              Cancelar
+              ❌ Cancelar
             </button>
             <button
               type="submit"
               className="btn-primary flex-1"
               disabled={loading}
             >
-              {loading ? 'Creando...' : '🏆 Crear Torneo'}
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"/>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                  </svg>
+                  Creando...
+                </span>
+              ) : (
+                '🏆 Crear Torneo'
+              )}
             </button>
           </div>
         </form>
