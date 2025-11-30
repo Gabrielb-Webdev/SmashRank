@@ -93,62 +93,90 @@ export default function Navbar() {
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-64 bg-gradient-to-br from-[#1a0b2e] to-[#0f0520] border border-purple-500/50 rounded-xl shadow-2xl shadow-purple-500/30 overflow-hidden z-50 animate-scale-in backdrop-blur-xl">
-                    <div className="p-4 border-b border-purple-500/40 bg-gradient-to-r from-purple-600/20 to-pink-600/20">
-                      <p className="text-xs text-purple-300 font-bold uppercase tracking-wider mb-1">Conectado como</p>
-                      <p className="text-base font-bold text-white truncate">{session.user?.email}</p>
+                  <div className="absolute right-0 mt-4 w-72 bg-gradient-to-br from-[#1a1a28] to-[#12121c] border-4 border-[#FF0046] rounded-2xl shadow-2xl overflow-hidden z-50 animate-scale-in backdrop-blur-2xl" style={{ boxShadow: '0 0 40px rgba(255, 0, 70, 0.6), 0 0 80px rgba(0, 217, 255, 0.3), 0 30px 60px rgba(0, 0, 0, 0.8)' }}>
+                    {/* Header */}
+                    <div className="p-5 border-b-4 border-[#00D9FF] bg-gradient-to-r from-[#FF0046]/20 to-[#00D9FF]/20 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer"></div>
+                      <p className="text-xs text-[#FFD700] font-black uppercase tracking-[0.2em] mb-2 drop-shadow-[0_0_10px_rgba(255,215,0,0.8)]">⚡ Conectado</p>
+                      <p className="text-lg font-black text-white truncate drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{session.user?.email}</p>
                     </div>
                     
-                    <div className="p-2">
+                    {/* Menu Items */}
+                    <div className="p-3 space-y-1">
                       {(session.user as any)?.role === 'admin' && (
                         <>
                           <Link 
                             href="/admin"
-                            className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gradient-to-r hover:from-purple-500/30 hover:to-pink-500/30 transition-all duration-300 text-sm font-bold text-white hover:scale-105 transform border border-transparent hover:border-purple-400/30"
+                            className="flex items-center gap-4 px-4 py-3.5 rounded-xl font-black uppercase text-sm tracking-wide text-white transition-all duration-300 relative overflow-hidden group"
+                            style={{ 
+                              background: 'linear-gradient(135deg, rgba(255, 0, 70, 0.2) 0%, rgba(255, 0, 70, 0.1) 100%)',
+                              border: '2px solid rgba(255, 0, 70, 0.3)',
+                              boxShadow: '0 0 15px rgba(255, 0, 70, 0.3)'
+                            }}
                             onClick={() => setUserMenuOpen(false)}
                           >
-                            <span className="text-xl">🛡️</span>
-                            <span>Panel de Admin</span>
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#FF0046] to-[#FFD700] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <span className="text-2xl relative z-10 drop-shadow-[0_0_10px_rgba(255,0,70,1)]">🛡️</span>
+                            <span className="relative z-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">Panel Admin</span>
                           </Link>
-                          <div className="h-2"></div>
                         </>
                       )}
                       
                       <Link 
                         href="/dashboard"
-                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-pink-500/20 transition-all duration-300 text-sm font-bold text-white hover:scale-105 transform"
+                        className="flex items-center gap-4 px-4 py-3.5 rounded-xl font-black uppercase text-sm tracking-wide text-white transition-all duration-300 hover:scale-105 relative overflow-hidden group"
+                        style={{ 
+                          background: 'linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(0, 150, 255, 0.1) 100%)',
+                          border: '2px solid rgba(0, 217, 255, 0.3)'
+                        }}
                         onClick={() => setUserMenuOpen(false)}
                       >
-                        <span className="text-xl">👤</span>
-                        <span>Mi Perfil</span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#00D9FF] to-[#FFD700] opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                        <span className="text-2xl relative z-10 drop-shadow-[0_0_10px_rgba(0,217,255,1)]">👤</span>
+                        <span className="relative z-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">Mi Perfil</span>
                       </Link>
                       
                       <Link 
                         href="/dashboard/tournaments"
-                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-pink-500/20 transition-all duration-300 text-sm font-bold text-white hover:scale-105 transform"
+                        className="flex items-center gap-4 px-4 py-3.5 rounded-xl font-black uppercase text-sm tracking-wide text-white transition-all duration-300 hover:scale-105 relative overflow-hidden group"
+                        style={{ 
+                          background: 'linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(0, 150, 255, 0.1) 100%)',
+                          border: '2px solid rgba(0, 217, 255, 0.3)'
+                        }}
                         onClick={() => setUserMenuOpen(false)}
                       >
-                        <span className="text-xl">🏆</span>
-                        <span>Mis Torneos</span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#00D9FF] to-[#FFD700] opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                        <span className="text-2xl relative z-10 drop-shadow-[0_0_10px_rgba(255,215,0,1)]">🏆</span>
+                        <span className="relative z-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">Mis Torneos</span>
                       </Link>
                       
                       <Link 
                         href="/dashboard/stats"
-                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-pink-500/20 transition-all duration-300 text-sm font-bold text-white hover:scale-105 transform"
+                        className="flex items-center gap-4 px-4 py-3.5 rounded-xl font-black uppercase text-sm tracking-wide text-white transition-all duration-300 hover:scale-105 relative overflow-hidden group"
+                        style={{ 
+                          background: 'linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(0, 150, 255, 0.1) 100%)',
+                          border: '2px solid rgba(0, 217, 255, 0.3)'
+                        }}
                         onClick={() => setUserMenuOpen(false)}
                       >
-                        <span className="text-xl">📊</span>
-                        <span>Estadísticas</span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#00D9FF] to-[#32FF96] opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+                        <span className="text-2xl relative z-10 drop-shadow-[0_0_10px_rgba(50,255,150,1)]">📊</span>
+                        <span className="relative z-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">Estadísticas</span>
                       </Link>
                     </div>
                     
-                    <div className="border-t border-purple-500/40 bg-gradient-to-r from-red-900/10 to-red-800/10">
+                    {/* Footer - Logout */}
+                    <div className="border-t-4 border-red-500/50">
                       <button
                         onClick={() => signOut({ callbackUrl: '/' })}
-                        className="w-full flex items-center gap-3 px-6 py-3 hover:bg-red-500/30 transition-all duration-300 text-sm text-left text-red-400 font-bold hover:text-red-300"
+                        className="w-full flex items-center gap-4 px-6 py-4 font-black uppercase text-sm tracking-wide text-red-400 hover:text-white transition-all duration-300 relative overflow-hidden group"
+                        style={{ 
+                          background: 'linear-gradient(135deg, rgba(200, 0, 0, 0.2) 0%, rgba(150, 0, 0, 0.1) 100%)'
+                        }}
                       >
-                        <span className="text-xl">🚪</span>
-                        <span>Cerrar Sesión</span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <span className="text-2xl relative z-10 drop-shadow-[0_0_10px_rgba(255,0,0,1)] group-hover:animate-pulse">🚪</span>
+                        <span className="relative z-10 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">Cerrar Sesión</span>
                       </button>
                     </div>
                   </div>
