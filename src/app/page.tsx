@@ -31,38 +31,38 @@ export default async function Home() {
 
         {/* Content */}
         <div className="relative z-10 container mx-auto px-6 text-center">
-          <h1 className="text-6xl md:text-8xl font-bold font-poppins mb-6">
+          <h1 className="text-6xl md:text-8xl font-bold font-poppins mb-6 animate-fade-in">
             <span className="gradient-text">SmashRank</span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-4">
+          <p className="text-xl md:text-2xl text-gray-300 mb-4 animate-fade-in font-bold" style={{ animationDelay: '0.2s' }}>
             Plataforma de torneos y ranking
           </p>
-          <p className="text-lg text-gray-400 mb-12">
+          <p className="text-lg text-gray-400 mb-12 animate-fade-in font-semibold" style={{ animationDelay: '0.4s' }}>
             Super Smash Bros Ultimate
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link href="/tournaments" className="btn-primary">
-              Ver Torneos
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in" style={{ animationDelay: '0.6s' }}>
+            <Link href="/tournaments" className="btn-primary transform hover:scale-110 transition-all duration-300">
+              Ver Torneos 🎮
             </Link>
-            <Link href="/ranking" className="btn-secondary">
-              Ver Ranking
+            <Link href="/ranking" className="btn-secondary transform hover:scale-110 transition-all duration-300">
+              Ver Ranking 🏆
             </Link>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 max-w-4xl mx-auto">
-            <div className="card">
+            <div className="card-interactive animate-scale-in" style={{ animationDelay: '0.8s' }}>
               <div className="text-4xl font-bold gradient-text mb-2">{stats.tournamentsCount}</div>
-              <div className="text-gray-400">Torneos Activos</div>
+              <div className="text-gray-300 font-semibold">Torneos Activos</div>
             </div>
-            <div className="card">
+            <div className="card-interactive animate-scale-in" style={{ animationDelay: '1s' }}>
               <div className="text-4xl font-bold gradient-text mb-2">{stats.playersCount}</div>
-              <div className="text-gray-400">Jugadores Registrados</div>
+              <div className="text-gray-300 font-semibold">Jugadores Registrados</div>
             </div>
-            <div className="card">
+            <div className="card-interactive animate-scale-in" style={{ animationDelay: '1.2s' }}>
               <div className="text-4xl font-bold gradient-text mb-2">{stats.matchesCount}</div>
-              <div className="text-gray-400">Matches Jugados</div>
+              <div className="text-gray-300 font-semibold">Matches Jugados</div>
             </div>
           </div>
         </div>
@@ -71,55 +71,55 @@ export default async function Home() {
       {/* Features Section */}
       <section className="py-20 px-6">
         <div className="container mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold font-poppins text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold font-poppins text-center mb-16 animate-fade-in">
             <span className="gradient-text">Características</span>
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="card">
-              <div className="text-5xl mb-4">🏆</div>
-              <h3 className="text-2xl font-bold font-poppins mb-3">Torneos Competitivos</h3>
-              <p className="text-gray-400">
+            <div className="card-interactive animate-slide-up" style={{ animationDelay: '0s' }}>
+              <div className="text-5xl mb-4 animate-float">🏆</div>
+              <h3 className="text-2xl font-bold font-poppins mb-3 text-white">Torneos Competitivos</h3>
+              <p className="text-gray-300">
                 Sistema de brackets single y double elimination con configuración personalizada por ronda
               </p>
             </div>
 
-            <div className="card">
-              <div className="text-5xl mb-4">🎮</div>
-              <h3 className="text-2xl font-bold font-poppins mb-3">Matchmaking</h3>
-              <p className="text-gray-400">
+            <div className="card-interactive animate-slide-up" style={{ animationDelay: '0.1s' }}>
+              <div className="text-5xl mb-4 animate-float" style={{ animationDelay: '0.5s' }}>🎮</div>
+              <h3 className="text-2xl font-bold font-poppins mb-3 text-white">Matchmaking</h3>
+              <p className="text-gray-300">
                 Encuentra oponentes de tu nivel para partidas amistosas con emparejamiento automático
               </p>
             </div>
 
-            <div className="card">
-              <div className="text-5xl mb-4">📊</div>
-              <h3 className="text-2xl font-bold font-poppins mb-3">Sistema de Ranking</h3>
-              <p className="text-gray-400">
+            <div className="card-interactive animate-slide-up" style={{ animationDelay: '0.2s' }}>
+              <div className="text-5xl mb-4 animate-float" style={{ animationDelay: '1s' }}>📊</div>
+              <h3 className="text-2xl font-bold font-poppins mb-3 text-white">Sistema de Ranking</h3>
+              <p className="text-gray-300">
                 Sube en el ranking global con puntos personalizados y estadísticas detalladas
               </p>
             </div>
 
-            <div className="card">
-              <div className="text-5xl mb-4">🎯</div>
-              <h3 className="text-2xl font-bold font-poppins mb-3">Stage/Character Select</h3>
-              <p className="text-gray-400">
+            <div className="card-interactive animate-slide-up" style={{ animationDelay: '0.3s' }}>
+              <div className="text-5xl mb-4 animate-float" style={{ animationDelay: '1.5s' }}>🎯</div>
+              <h3 className="text-2xl font-bold font-poppins mb-3 text-white">Stage/Character Select</h3>
+              <p className="text-gray-300">
                 Sistema interactivo por turnos con DSR (Dave's Stupid Rule) para competencia justa
               </p>
             </div>
 
-            <div className="card">
-              <div className="text-5xl mb-4">✅</div>
-              <h3 className="text-2xl font-bold font-poppins mb-3">Verificación de Resultados</h3>
-              <p className="text-gray-400">
+            <div className="card-interactive animate-slide-up" style={{ animationDelay: '0.4s' }}>
+              <div className="text-5xl mb-4 animate-float" style={{ animationDelay: '2s' }}>✅</div>
+              <h3 className="text-2xl font-bold font-poppins mb-3 text-white">Verificación de Resultados</h3>
+              <p className="text-gray-300">
                 Confirmación mutua entre jugadores para garantizar la integridad de los resultados
               </p>
             </div>
 
-            <div className="card">
-              <div className="text-5xl mb-4">🔗</div>
-              <h3 className="text-2xl font-bold font-poppins mb-3">Integración start.gg</h3>
-              <p className="text-gray-400">
+            <div className="card-interactive animate-slide-up" style={{ animationDelay: '0.5s' }}>
+              <div className="text-5xl mb-4 animate-float" style={{ animationDelay: '2.5s' }}>🔗</div>
+              <h3 className="text-2xl font-bold font-poppins mb-3 text-white">Integración start.gg</h3>
+              <p className="text-gray-300">
                 Sincroniza tus resultados con start.gg y valida tu participación en torneos oficiales
               </p>
             </div>

@@ -40,33 +40,37 @@ export default function Navbar() {
             <li>
               <Link 
                 href="/" 
-                className="text-gray-300 hover:text-white transition-colors duration-300 font-medium"
+                className="text-gray-200 hover:text-white transition-all duration-300 font-bold relative group"
               >
                 Inicio
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 group-hover:w-full transition-all duration-300"></span>
               </Link>
             </li>
             <li>
               <Link 
                 href="/tournaments" 
-                className="text-gray-300 hover:text-white transition-colors duration-300 font-medium"
+                className="text-gray-200 hover:text-white transition-all duration-300 font-bold relative group"
               >
                 Torneos
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 group-hover:w-full transition-all duration-300"></span>
               </Link>
             </li>
             <li>
               <Link 
                 href="/ranking" 
-                className="text-gray-300 hover:text-white transition-colors duration-300 font-medium"
+                className="text-gray-200 hover:text-white transition-all duration-300 font-bold relative group"
               >
                 Ranking
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 group-hover:w-full transition-all duration-300"></span>
               </Link>
             </li>
             <li>
               <Link 
                 href="/matchmaking" 
-                className="text-gray-300 hover:text-white transition-colors duration-300 font-medium"
+                className="text-gray-200 hover:text-white transition-all duration-300 font-bold relative group"
               >
                 Matchmaking
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 group-hover:w-full transition-all duration-300"></span>
               </Link>
             </li>
           </ul>
@@ -77,64 +81,63 @@ export default function Navbar() {
               <div className="relative">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-3 px-4 py-2 rounded-lg bg-purple-500/10 border border-purple-500/30 hover:border-purple-500/50 transition-all"
+                  className="flex items-center gap-3 px-5 py-2.5 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/40 hover:border-purple-400 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 font-bold"
                 >
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center font-bold text-sm">
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center font-bold text-sm shadow-lg">
                     {session.user?.email?.charAt(0).toUpperCase()}
                   </div>
-                  <span className="text-sm font-medium">{session.user?.email}</span>
-                  <svg className={`w-4 h-4 transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <span className="text-sm font-bold text-white">{session.user?.email}</span>
+                  <svg className={`w-4 h-4 transition-transform duration-300 ${userMenuOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-[#1a0b2e] border border-purple-500/30 rounded-lg shadow-xl overflow-hidden z-50">
-                    <div className="p-3 border-b border-purple-500/20 bg-purple-500/5">
-                      <p className="text-xs text-gray-400">Conectado como</p>
-                      <p className="text-sm font-medium truncate">{session.user?.email}</p>
+                  <div className="absolute right-0 mt-2 w-60 bg-[#1a0b2e] border border-purple-500/40 rounded-lg shadow-2xl shadow-purple-500/20 overflow-hidden z-50 animate-scale-in">
+                    <div className="p-4 border-b border-purple-500/30 bg-gradient-to-r from-purple-500/10 to-pink-500/10">
+                      <p className="text-xs text-gray-300 font-semibold">Conectado como</p>
+                      <p className="text-sm font-bold text-white truncate">{session.user?.email}</p>
                     </div>
                     
                     {(session.user as any)?.role === 'admin' && (
                       <>
                         <Link 
                           href="/admin"
-                          className="block px-4 py-3 hover:bg-purple-500/10 transition-colors text-sm font-medium"
+                          className="block px-4 py-3 hover:bg-gradient-to-r hover:from-purple-500/20 hover:to-pink-500/20 transition-all duration-200 text-sm font-bold border-b border-purple-500/10"
                           onClick={() => setUserMenuOpen(false)}
                         >
                           🛡️ Panel de Administrador
                         </Link>
-                        <div className="border-t border-purple-500/20"></div>
                       </>
                     )}
                     
                     <Link 
                       href="/dashboard"
-                      className="block px-4 py-3 hover:bg-purple-500/10 transition-colors text-sm"
+                      className="block px-4 py-3 hover:bg-purple-500/20 transition-all duration-200 text-sm font-semibold"
                       onClick={() => setUserMenuOpen(false)}
                     >
                       👤 Mi Perfil
                     </Link>
                     <Link 
                       href="/dashboard/tournaments"
-                      className="block px-4 py-3 hover:bg-purple-500/10 transition-colors text-sm"
+                      className="block px-4 py-3 hover:bg-purple-500/20 transition-all duration-200 text-sm font-semibold"
                       onClick={() => setUserMenuOpen(false)}
                     >
                       🏆 Mis Torneos
                     </Link>
                     <Link 
                       href="/dashboard/stats"
-                      className="block px-4 py-3 hover:bg-purple-500/10 transition-colors text-sm"
+                      className="block px-4 py-3 hover:bg-purple-500/20 transition-all duration-200 text-sm font-semibold"
                       onClick={() => setUserMenuOpen(false)}
                     >
                       📊 Estadísticas
                     </Link>
                     
-                    <div className="border-t border-purple-500/20"></div>
+                    <div className="border-t border-purple-500/30"></div>
                     
                     <button
                       onClick={() => signOut({ callbackUrl: '/' })}
-                      className="w-full px-4 py-3 hover:bg-red-500/10 transition-colors text-sm text-left text-red-400 font-medium"
+                      className="w-full px-4 py-3 hover:bg-red-500/20 transition-all duration-200 text-sm text-left text-red-400 font-bold"
                     >
                       🚪 Cerrar Sesión
                     </button>
@@ -142,22 +145,22 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
+            ) : (
               <>
                 <Link 
                   href="/login" 
-                  className="text-gray-300 hover:text-white transition-colors duration-300 font-medium"
+                  className="text-gray-200 hover:text-white transition-all duration-300 font-bold hover:scale-110"
                 >
                   Iniciar Sesión
                 </Link>
                 <Link 
                   href="/register" 
-                  className="btn-primary"
+                  className="btn-primary transform hover:scale-110 transition-all duration-300"
                 >
                   Registrarse
                 </Link>
               </>
-            )}
-          </div>
+            )}v>
 
           {/* Mobile Menu Button */}
           <button

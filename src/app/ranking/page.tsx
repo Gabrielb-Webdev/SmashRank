@@ -59,29 +59,29 @@ export default async function RankingPage() {
   return (
     <div className="container mx-auto px-6 py-12">
       {/* Header */}
-      <div className="mb-12">
-        <h1 className="text-4xl font-bold font-poppins gradient-text mb-4">
-          Ranking
+      <div className="mb-12 animate-fade-in">
+        <h1 className="text-5xl md:text-6xl font-bold font-poppins gradient-text mb-4">
+          🏆 Ranking
         </h1>
-        <p className="text-gray-400 text-lg">
+        <p className="text-gray-300 text-lg font-semibold">
           Tabla de clasificación de jugadores de SmashRank
         </p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="card">
-          <h3 className="text-sm text-gray-400 mb-2">Total Jugadores</h3>
+        <div className="card-interactive animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <h3 className="text-sm text-gray-300 mb-2 font-semibold">Total Jugadores</h3>
           <p className="text-3xl font-bold gradient-text">{players.length}</p>
         </div>
-        <div className="card">
-          <h3 className="text-sm text-gray-400 mb-2">Puntos Promedio</h3>
+        <div className="card-interactive animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          <h3 className="text-sm text-gray-300 mb-2 font-semibold">Puntos Promedio</h3>
           <p className="text-3xl font-bold gradient-text">
             {Math.round(players.reduce((sum, p) => sum + p.points, 0) / (players.length || 1))}
           </p>
         </div>
-        <div className="card">
-          <h3 className="text-sm text-gray-400 mb-2">Líder Actual</h3>
+        <div className="card-interactive animate-slide-up" style={{ animationDelay: '0.3s' }}>
+          <h3 className="text-sm text-gray-300 mb-2 font-semibold">Líder Actual</h3>
           <p className="text-3xl font-bold gradient-text">
             {players[0]?.gamertag || 'N/A'}
           </p>
@@ -89,9 +89,9 @@ export default async function RankingPage() {
       </div>
 
       {/* Filters */}
-      <div className="mb-6 flex gap-4 flex-wrap items-center">
-        <select className="input w-auto">
-          <option>Todas las provincias</option>
+      <div className="mb-6 flex gap-4 flex-wrap items-center animate-fade-in" style={{ animationDelay: '0.4s' }}>
+        <select className="select-fancy w-auto">
+          <option>📍 Todas las provincias</option>
           <option>Buenos Aires</option>
           <option>Ciudad Autónoma de Buenos Aires</option>
           <option>Córdoba</option>
@@ -119,37 +119,37 @@ export default async function RankingPage() {
         </select>
         <input 
           type="text" 
-          placeholder="Buscar jugador..." 
-          className="input flex-1 max-w-md"
+          placeholder="🔍 Buscar jugador..." 
+          className="input flex-1 max-w-md font-semibold"
         />
       </div>
 
       {/* Ranking Table */}
       {players.length === 0 ? (
-        <div className="card p-12 text-center">
+        <div className="card p-12 text-center animate-fade-in">
           <div className="max-w-md mx-auto">
-            <div className="text-6xl mb-6">📊</div>
-            <h2 className="text-2xl font-bold font-poppins mb-4">
+            <div className="text-6xl mb-6 animate-float">📊</div>
+            <h2 className="text-2xl font-bold font-poppins mb-4 gradient-text">
               No hay jugadores registrados
             </h2>
-            <p className="text-gray-400">
+            <p className="text-gray-300">
               El ranking aparecerá cuando los jugadores se registren y participen en torneos.
             </p>
           </div>
         </div>
       ) : (
-        <div className="card overflow-hidden">
+        <div className="card overflow-hidden animate-fade-in" style={{ animationDelay: '0.5s' }}>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-purple-500/20">
-                  <th className="text-left p-4 text-gray-400 font-medium">Posición</th>
-                  <th className="text-left p-4 text-gray-400 font-medium">Jugador</th>
-                  <th className="text-left p-4 text-gray-400 font-medium">Personaje(s)</th>
-                  <th className="text-center p-4 text-gray-400 font-medium">Región</th>
-                  <th className="text-center p-4 text-gray-400 font-medium">Torneos</th>
-                  <th className="text-center p-4 text-gray-400 font-medium">Top 3</th>
-                  <th className="text-right p-4 text-gray-400 font-medium">Puntos</th>
+                <tr className="border-b border-purple-500/30 bg-purple-500/5">
+                  <th className="text-left p-4 text-gray-200 font-bold">Posición</th>
+                  <th className="text-left p-4 text-gray-200 font-bold">Jugador</th>
+                  <th className="text-left p-4 text-gray-200 font-bold">Personaje(s)</th>
+                  <th className="text-center p-4 text-gray-200 font-bold">Región</th>
+                  <th className="text-center p-4 text-gray-200 font-bold">Torneos</th>
+                  <th className="text-center p-4 text-gray-200 font-bold">Top 3</th>
+                  <th className="text-right p-4 text-gray-200 font-bold">Puntos</th>
                 </tr>
               </thead>
               <tbody>
@@ -161,7 +161,7 @@ export default async function RankingPage() {
                   return (
                     <tr 
                       key={player.id}
-                      className="border-b border-purple-500/10 hover:bg-purple-500/5 transition-colors"
+                      className="border-b border-purple-500/10 hover:bg-purple-500/10 transition-all duration-300 hover:scale-[1.01] cursor-pointer"
                     >
                       {/* Position */}
                       <td className="p-4">
@@ -172,14 +172,14 @@ export default async function RankingPage() {
 
                       {/* Player */}
                       <td className="p-4">
-                        <a href={`/players/${player.id}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
+                        <a href={`/players/${player.id}`} className="flex items-center gap-3 hover:opacity-80 transition-all duration-300 group">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:shadow-purple-500/50 transition-shadow duration-300">
                             {player.gamertag[0].toUpperCase()}
                           </div>
                           <div>
-                            <div className="font-semibold text-purple-400">{player.gamertag}</div>
+                            <div className="font-bold text-lg text-white group-hover:text-purple-300 transition-colors">{player.gamertag}</div>
                             {position <= 3 && (
-                              <div className="text-xs text-gray-500">Top Player</div>
+                              <div className="text-xs text-yellow-400 font-semibold">⭐ Top Player</div>
                             )}
                           </div>
                         </a>
@@ -187,44 +187,44 @@ export default async function RankingPage() {
 
                       {/* Characters */}
                       <td className="p-4">
-                        <div className="flex gap-1 flex-wrap">
+                        <div className="flex gap-2 flex-wrap">
                           {characters.length > 0 ? (
                             characters.map((char, i) => (
                               <span 
                                 key={i}
-                                className="px-2 py-1 bg-purple-500/20 text-purple-400 rounded text-xs"
+                                className="px-3 py-1 bg-gradient-to-r from-purple-500/30 to-pink-500/30 text-purple-200 rounded-full text-xs font-bold border border-purple-500/20 hover:scale-110 transition-transform duration-200"
                               >
                                 {char.trim()}
                               </span>
                             ))
                           ) : (
-                            <span className="text-gray-500 text-sm">-</span>
+                            <span className="text-gray-400 text-sm font-semibold">-</span>
                           )}
                         </div>
                       </td>
 
                       {/* Region */}
                       <td className="p-4 text-center">
-                        <span className="text-sm text-gray-400">
+                        <span className="text-sm text-gray-200 font-semibold">
                           {player.region || '-'}
                         </span>
                       </td>
 
                       {/* Tournaments */}
                       <td className="p-4 text-center">
-                        <span className="font-semibold">{player.tournaments.length}</span>
+                        <span className="font-bold text-white text-lg">{player.tournaments.length}</span>
                       </td>
 
                       {/* Win Rate */}
                       <td className="p-4 text-center">
-                        <span className={`font-semibold ${winRate > 50 ? 'text-green-400' : 'text-gray-400'}`}>
+                        <span className={`font-bold text-lg ${winRate > 50 ? 'text-green-400' : winRate > 30 ? 'text-blue-400' : 'text-gray-300'}`}>
                           {winRate}%
                         </span>
                       </td>
 
                       {/* Points */}
                       <td className="p-4 text-right">
-                        <div className="font-bold text-lg gradient-text">
+                        <div className="font-bold text-xl gradient-text">
                           {player.points.toLocaleString()}
                         </div>
                       </td>

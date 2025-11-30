@@ -56,28 +56,28 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 animate-fade-in">
           <div className="flex justify-center mb-6 relative">
-            <div className="absolute inset-0 blur-3xl opacity-30 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
+            <div className="absolute inset-0 blur-3xl opacity-30 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-pulse-glow"></div>
             <Image 
               src="/logo.svg" 
               alt="SmashRank" 
               width={100} 
               height={100}
               priority
-              className="relative z-10"
+              className="relative z-10 animate-float"
             />
           </div>
-          <h1 className="text-4xl font-extrabold font-poppins gradient-text mb-3">
+          <h1 className="text-5xl font-extrabold font-poppins gradient-text mb-3">
             Crear Cuenta
           </h1>
-          <p className="text-gray-400 text-sm">
+          <p className="text-gray-300 text-base font-semibold">
             Únete a la comunidad de SmashRank
           </p>
         </div>
 
         {/* Form Card */}
-        <div className="card p-8 shadow-2xl shadow-purple-500/20">
+        <div className="card p-8 shadow-2xl shadow-purple-500/30 animate-scale-in" style={{ animationDelay: '0.2s' }}>
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Message */}
             {error && (
@@ -88,15 +88,15 @@ export default function RegisterPage() {
 
             {/* Name Input */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium mb-2 text-gray-300">
-                Nombre de Usuario
+              <label htmlFor="name" className="block text-sm font-bold mb-2 text-gray-200">
+                👤 Nombre de Usuario
               </label>
               <input
                 id="name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="input w-full"
+                className="input w-full font-semibold"
                 placeholder="MiNickname"
                 required
                 disabled={loading}
@@ -106,15 +106,15 @@ export default function RegisterPage() {
 
             {/* Email Input */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-2 text-gray-300">
-                Email
+              <label htmlFor="email" className="block text-sm font-bold mb-2 text-gray-200">
+                📧 Email
               </label>
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="input w-full"
+                className="input w-full font-semibold"
                 placeholder="tu@email.com"
                 required
                 disabled={loading}
@@ -123,15 +123,15 @@ export default function RegisterPage() {
 
             {/* Password Input */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium mb-2 text-gray-300">
-                Contraseña
+              <label htmlFor="password" className="block text-sm font-bold mb-2 text-gray-200">
+                🔒 Contraseña
               </label>
               <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="input w-full"
+                className="input w-full font-semibold"
                 placeholder="••••••••"
                 required
                 disabled={loading}
@@ -141,15 +141,15 @@ export default function RegisterPage() {
 
             {/* Confirm Password Input */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium mb-2 text-gray-300">
-                Confirmar Contraseña
+              <label htmlFor="confirmPassword" className="block text-sm font-bold mb-2 text-gray-200">
+                ✅ Confirmar Contraseña
               </label>
               <input
                 id="confirmPassword"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="input w-full"
+                className="input w-full font-semibold"
                 placeholder="••••••••"
                 required
                 disabled={loading}
@@ -160,17 +160,27 @@ export default function RegisterPage() {
             {/* Submit Button */}
             <button
               type="submit"
-              className="btn-primary w-full"
+              className="btn-primary w-full transform hover:scale-105 transition-all duration-300"
               disabled={loading}
             >
-              {loading ? 'Creando cuenta...' : 'Registrarse'}
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creando cuenta...
+                </span>
+              ) : (
+                '🚀 Registrarse'
+              )}
             </button>
           </form>
 
           {/* Login Link */}
-          <div className="mt-6 text-center text-sm text-gray-400">
+          <div className="mt-6 text-center text-sm text-gray-300">
             ¿Ya tienes cuenta?{' '}
-            <Link href="/login" className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+            <Link href="/login" className="text-purple-400 hover:text-purple-300 font-bold transition-all duration-200 hover:underline">
               Inicia sesión aquí
             </Link>
           </div>
