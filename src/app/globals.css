@@ -24,16 +24,16 @@
   }
   
   .btn-primary {
-    @apply relative bg-gradient-to-r from-primary to-secondary text-white px-8 py-3.5 rounded-xl font-semibold transition-all duration-300 hover:shadow-glow-lg hover:-translate-y-1 hover:scale-105 active:scale-95 overflow-hidden group;
+    @apply relative bg-gradient-to-r from-primary to-secondary text-white px-8 py-3.5 rounded-xl font-semibold transition-all duration-300 hover:shadow-glow-lg hover:-translate-y-1 hover:scale-105 active:scale-95 overflow-hidden;
   }
   
   .btn-primary::before {
     content: '';
-    @apply absolute inset-0 bg-gradient-to-r from-secondary to-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100;
+    @apply absolute inset-0 bg-gradient-to-r from-secondary to-primary opacity-0 transition-opacity duration-300;
   }
   
-  .btn-primary span, .btn-primary::after {
-    @apply relative z-10;
+  .btn-primary:hover::before {
+    @apply opacity-100;
   }
   
   .btn-secondary {
